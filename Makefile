@@ -1,6 +1,6 @@
 CXX = g++
 CFLAGS = -g -std=c++0x -I include/
-LDFLAGS =
+LDFLAGS = -lgsl -lgslcblas -lcairo
 WARNINGS = -Wall
 SOURCES = $(wildcard src/*.cpp)
 OBJECTS = $(addprefix obj/,$(notdir $(SOURCES:.cpp=.o)))
