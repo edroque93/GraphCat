@@ -1,5 +1,5 @@
 CXX = g++
-CFLAGS = -g -std=c++0x -I include/
+CFLAGS = -g -std=c++0x
 LDFLAGS = -lgsl -lgslcblas -lcairo
 WARNINGS = -Wall
 SOURCES = $(wildcard src/*.cpp)
@@ -10,7 +10,7 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	@echo Linking
-	@$(CXX) $(OBJECTS) -o $(EXECUTABLE) $(LIBRARIES) $(LDFLAGS)
+	@$(CXX) $(OBJECTS) -o $(EXECUTABLE) $(LDFLAGS)
 
 obj/%.o: src/%.cpp
 	@echo Compiling $<
