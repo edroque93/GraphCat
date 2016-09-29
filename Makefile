@@ -1,8 +1,8 @@
 CXX = g++
-CFLAGS = -g -std=c++0x
+CFLAGS = -g -std=c++0x -Isrc/backend/
 LDFLAGS = -lgsl -lgslcblas -lcairo
 WARNINGS = -Wall
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = $(shell find src/ -name *.cpp)
 OBJECTS = $(addprefix obj/,$(notdir $(SOURCES:.cpp=.o)))
 EXECUTABLE = graphcat
 
@@ -17,5 +17,13 @@ obj/%.o: src/%.cpp
 	@mkdir obj -p
 	@$(CXX) -c $< -o $@ $(CFLAGS) $(WARNINGS)
 
+obj/%.o: src/backend/%.cpp
+	@echo Compiling backend $<
+	@mkdir obj -p
+	@$(CXX) -c $< -o $@ $(CFLAGS) $(WARNINGS)
+
 clean:
 	@rm -rf $(EXECUTABLE) $(OBJECTS)
+
+qformat:
+	@clang-format-3.8 -i $(SOURCES)

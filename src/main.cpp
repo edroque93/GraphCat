@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <cairo/cairo-svg.h>
+#include <backend.hpp>
 
 using namespace std;
 
@@ -17,4 +17,7 @@ int main() {
 
     cout << "Hello dgfg dfg dfg dfWorld" << endl
          << "Bye bye dfgdf gdf gdfgdf  world" << endl;
+
+    backend b;
+    b.doTheThing();
 }
