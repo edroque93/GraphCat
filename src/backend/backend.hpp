@@ -6,6 +6,14 @@
 #include <cairo/cairo-svg.h>
 #include <math.h>
 
+/*
+ Missing stuff:
+ - G(N, E)
+ - Output configuration
+   - Surface type: SVG/PNG/...
+   - W/H and margin
+
+*/
 class backend {
    public:
     backend() {}
