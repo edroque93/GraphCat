@@ -26,4 +26,4 @@ clean:
 	@rm -rf $(EXECUTABLE) $(OBJECTS)
 
 qformat:
-	@clang-format-3.8 -i $(SOURCES)
+	@clang-format-3.8 -i $(SOURCES) $(shell find src/ -name *.hpp)
