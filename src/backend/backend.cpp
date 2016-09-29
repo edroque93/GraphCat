@@ -6,11 +6,23 @@ void backend::doTheThing() {
     const int width = 512;
     const int height = 512;
     const int margin = 32;
-    const int nodes = 4;
-    const double x[] = {0., 0.33, 0.66, 1.};
-    const double y[] = {0., 0.33, 0.33, 0.};
+    const int nodes = 13;
+    const double x[] = {0.0, 0.05, 0.15, 0.25, 0.25, 0.45, 0.5, 0.55, 0.75, 0.75, 0.85, 0.95, 1.0};
+    const double y[] = {0.3, 0.1,  0.0,  0.75, 0.1,  0.25, 1.0, 0.25, 0.1,  0.75, 0.0,  0.1,  0.3};
     const bool edges[nodes][nodes] = {
-        {0, 1, 1, 1}, {0, 0, 1, 1}, {0, 0, 0, 1}, {0, 0, 0, 0}};
+		{0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1},
+		{0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0},
+		{0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0},
+		{0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1},
+		{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	};
 
     cairo_surface_t *surface =
         cairo_svg_surface_create("test.svg", width, height);
@@ -20,7 +32,7 @@ void backend::doTheThing() {
     for (int i = 0; i < nodes; i++) {
         int nodex = margin + (width - margin * 2) * x[i];
         int nodey = margin + (height - margin * 2) * y[i];
-        cairo_arc(cr, nodex, nodey, 10.0, 0.0, M_PI * 2.0);
+        cairo_arc(cr, nodex, nodey, 7.0, 0.0, M_PI * 2.0);
         cairo_fill(cr);
         cairo_stroke(cr);
         for (int j = i; j < nodes; j++) {
