@@ -1,7 +1,7 @@
 CXX = g++
 CFLAGS = -g -std=c++0x -Isrc/backend/
 LDFLAGS = -lgsl -lgslcblas -lcairo
-WARNINGS = -Wall
+WARNINGS = -Wall -Wno-unused-variable
 SOURCES = $(shell find src/ -name *.cpp)
 OBJECTS = $(addprefix obj/,$(notdir $(SOURCES:.cpp=.o)))
 EXECUTABLE = graphcat
