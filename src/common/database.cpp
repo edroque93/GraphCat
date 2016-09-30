@@ -9,7 +9,8 @@ using namespace std;
 
 size_t database::index(const string &label) const {
     auto it = find(header.begin(), header.end(), label);
-    if (it == header.end()) throw runtime_error("label " + label + " not found");
+    if (it == header.end())
+        throw runtime_error("label " + label + " not found");
     return it - header.begin();
 }
 
@@ -54,7 +55,21 @@ database database::read_csv(const string &filename) {
     return db;
 }
 
-void database::save_csv(const string &filename, char delim) {}
+void database::save_csv(const string &filename, char delim) {
+    ofstream ofs(filename);
+
+    for (size_t j = 0; j < ncols - 1; ++j) {
+        ofs << header[j] << delim;
+    }
+    ofs << header[ncols-1] << '\n';
+
+    for (size_t i = 0; i < nrows; ++i) {
+        for (size_t j = 0; j < ncols - 1; ++j) {
+            ofs << at(i,j) << delim;
+        }
+        ofs << at(i, ncols-1) << '\n';
+    }
+}
 
 const string &database::at(size_t i, size_t j) const {
     if (i >= nrows || j >= ncols) throw runtime_error("index out of bounds");
