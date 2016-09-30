@@ -1,6 +1,6 @@
 VERSION ?= Debug
 CFLAGS_Debug = -g
-CFLAGS_Release = -02
+CFLAGS_Release = -O2
 
 CXX = g++
 CFLAGS = -std=c++0x $(CFLAGS_${VERSION})
