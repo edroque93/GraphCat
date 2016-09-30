@@ -1,47 +1,57 @@
 #include <iostream>
 #include <vector>
 
-#include <cairo/cairo-svg.h>
-
-#include "option.hpp"
+#include "backend/backend.hpp"
+#include "common/topology.hpp"
+#include "utils/log.hpp"
+#include "utils/option.hpp"
 
 using namespace std;
 
-void show_usage(char *progname) {
-    cout << "usage: " << progname << " [args]" << endl;
-    exit(0);
+// Command line options
+option_list opts = {
+    {"topo", "Topology file"},
+    {"filters", "List of filters"},
+    {"verbose", "Verbose output", "no"},
+    {"save-csv", "Save topology as .csv"},
+    {"save-dat", "Save topology as .dat"},
+};
+
+std::ostream &verbose() {
+    static bool v = opts.get<bool>("verbose");
+    return log_if(v);
 }
 
 int main(int argc, char **argv) try {
-    std::vector<int> nums = {};
-    std::vector<std::string> files = {};
-    int iters = 10;
-
-    OptionParser opts;
-    opts.add("numbers", nums)
-        .add("iters", iters)
-        .add("files", files)
-        .add("help", [&](int, char **) {
-            show_usage(argv[0]);
-            return 0;
-        });
+    if (argc == 1) {
+        opts.show_help();
+        return 0;
+    }
 
     opts.parse(argc - 1, argv + 1);
 
-    cout << "Numbers =";
-    for (auto &num : nums) {
-        cout << ' ' << num;
-    }
-    cout << endl;
-    cout << "Iterations = " << iters << endl;
-    cout << "Files =" << endl;
-    for (auto &file : files) {
-        cout << "- " << file << endl;
+    string topo_file = opts.get<string>("topo");
+    verbose() << "parsing topology file: " << topo_file << '\n';
+    topology topo = topology::read_csv(opts.get<string>("topo"));
+
+    if (opts.is_set("save-csv")) {
+        verbose() << "saving topology as csv";
+        topo.save_csv(opts["save-csv"]);
     }
 
-    Node a;
+    verbose() << topo;
+
+    // Just to show off..
+    vector<string> filters = opts.get_all<string>("filters");
+
+    if (filters.size() > 0) {
+        verbose() << "filters:\n";
+        for (auto &filter : filters) {
+            verbose() << "- " << filter << '\n';
+        }
+    }
 
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;
-    return -1;
+    return EXIT_FAILURE;
 }

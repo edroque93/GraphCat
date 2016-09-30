@@ -1,21 +1,35 @@
+VERSION ?= Debug
+CFLAGS_Debug = -g
+CFLAGS_Release = -02
+
 CXX = g++
-CFLAGS = -g -std=c++0x
+CFLAGS = -std=c++0x $(CFLAGS_${VERSION})
 LDFLAGS = -lgsl -lgslcblas -lcairo
-WARNINGS = -Wall
-SOURCES = $(wildcard src/*.cpp)
-OBJECTS = $(addprefix obj/,$(notdir $(SOURCES:.cpp=.o)))
+WARNINGS = -Wall -Wno-unused-variable
+SOURCES = $(shell find src/ -name *.cpp)
+OBJECTS = $(SOURCES:src/%.cpp=obj/%.o)
+DEPFILES = $(SOURCES:src/%.cpp=obj/%.deps)
 EXECUTABLE = graphcat
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECTS)
+$(EXECUTABLE): $(OBJECTS) $(DEPFILES)
 	@echo Linking
 	@$(CXX) $(OBJECTS) -o $(EXECUTABLE) $(LDFLAGS)
 
 obj/%.o: src/%.cpp
 	@echo Compiling $<
-	@mkdir obj -p
+	@mkdir -p $(@D)
 	@$(CXX) -c $< -o $@ $(CFLAGS) $(WARNINGS)
 
+obj/%.deps: src/%.cpp
+	@mkdir -p $(@D)
+	@$(CXX) -MM -MT $(@:%.deps=%.o) $< > $@
+
+-include $(DEPFILES)
+
 clean:
-	@rm -rf $(EXECUTABLE) $(OBJECTS)
+	@rm -rf $(EXECUTABLE) obj
+
+qformat:
+	@clang-format-3.8 -i $(SOURCES) $(shell find src/ -name *.hpp)
