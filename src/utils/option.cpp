@@ -7,21 +7,30 @@ extern char *__progname;
 
 using namespace std;
 
-std::vector<option_desc>::iterator option_list::find(const std::string &lab) {
+const string &option_list::find(const std::string &lab) const {
     auto it = find_if(opts.begin(), opts.end(),
                       [&](const option_desc &o) { return o.label == lab; });
     if (it == opts.end()) {
         throw std::runtime_error("option -" + lab + " not found");
     }
-    return it;
+    return it->value;
 }
 
-const string &option_list::operator[](const std::string &lab) {
-    return find(lab)->value;
+void option_list::set(const std::string &lab, const std::string &val) {
+    auto it = find_if(opts.begin(), opts.end(),
+                      [&](const option_desc &o) { return o.label == lab; });
+    if (it == opts.end()) {
+        throw std::runtime_error("option -" + lab + " not found");
+    }
+    it->value = val;
 }
 
-bool option_list::is_set(const std::string &lab) {
-    return !find(lab)->value.empty();
+const string &option_list::operator[](const std::string &lab) const {
+    return find(lab);
+}
+
+bool option_list::is_set(const std::string &lab) const {
+    return !find(lab).empty();
 }
 
 int option_list::parse(int argc, char **argv) {
@@ -43,19 +52,18 @@ int option_list::parse(int argc, char **argv) {
             exit(EXIT_SUCCESS);
         }
 
-        auto it = find(lab);
         n += 1;
         if (n == argc) {
             throw std::runtime_error("option -" + lab + " has no value");
         }
 
-        it->value = argv[n];
+        set(lab, argv[n]);
         n += 1;
     }
     return n;
 }
 
-void option_list::show_help(std::ostream &os) {
+void option_list::show_help(std::ostream &os) const {
     os << "\n usage: " << __progname << " [-help] [opts] -- [args]\n\n"
        << " options:\n";
     size_t max_len = 10;

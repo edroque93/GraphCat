@@ -54,7 +54,7 @@ topology topology::read_csv(const string &filename) {
     string line;
     ifstream ifs(filename);
 
-    const char *delim = ";,\t ";
+    const char *delim = ":;,\t ";
 
     if (!getline(ifs, line)) throw std::runtime_error("file is empty");
     vector<double> values = str_split<double>(line, delim);
@@ -121,10 +121,10 @@ void topology::save_dat(const string &filename) {
 
 std::ostream &operator<<(ostream &os, const topology &top) {
     for (size_t i = 0; i < top.size(); ++i) {
-        for (size_t j = 0; j < top.size() - 1; ++j) {
-            os << gsl_matrix_get(top.matrix, i, j) << ' ';
+        for (size_t j = 0; j < top.size(); ++j) {
+            os << ' ' << gsl_matrix_get(top.matrix, i, j);
         }
-        os << gsl_matrix_get(top.matrix, i, top.size() - 1) << '\n';
+        os << '\n';
     }
     return os;
 }

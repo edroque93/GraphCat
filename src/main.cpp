@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "backend/backend.hpp"
+#include "common/database.hpp"
 #include "common/topology.hpp"
 #include "utils/log.hpp"
 #include "utils/option.hpp"
@@ -11,13 +12,11 @@ using namespace std;
 // Command line options
 option_list opts = {
     {"topo", "Topology file"},
-    {"filters", "List of filters"},
-    {"verbose", "Verbose output", "no"},
-    {"save-csv", "Save topology"},
-    {"save-dat"},
+    {"pos", "Positions for each node"},
+    {"verbose", "Verbose output", "yes"},
 };
 
-std::ostream &verbose() {
+ostream &verbose() {
     static bool v = opts.get<bool>("verbose");
     return log_if(v);
 }
@@ -30,25 +29,21 @@ int main(int argc, char **argv) try {
 
     opts.parse(argc - 1, argv + 1);
 
-    string topo_file = opts.get<string>("topo");
-    verbose() << "parsing topology file: " << topo_file << '\n';
     topology topo = topology::read_csv(opts.get<string>("topo"));
+    database pos = database::read_csv(opts.get<string>("pos"));
 
-    if (opts.is_set("save-csv")) {
-        verbose() << "saving topology as csv";
-        topo.save_csv(opts["save-csv"]);
+    verbose() << "Topology:\n" << topo;
+    verbose() << "Positions:\n" << pos;
+
+    auto rec = pos[0];
+    verbose() << '(' << rec["xpos"] << ',' << rec["ypos"] << ")\n";
+
+    auto xpos = pos.values<double>("xpos");
+    verbose() << "x =";
+    for (auto &x : xpos) {
+        verbose() << ' ' << x;
     }
-
-    verbose() << topo;
-
-    // Just to show off..
-    vector<string> filters = opts.get_all<string>("filters");
-    if (filters.size() > 0) {
-        verbose() << "filters:\n";
-        for (auto &filter : filters) {
-            verbose() << "- " << filter << '\n';
-        }
-    }
+    verbose() << '\n';
 
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;
