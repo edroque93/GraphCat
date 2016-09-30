@@ -35,13 +35,23 @@ int main(int argc, char **argv) try {
     verbose() << "Topology:\n" << topo;
     verbose() << "Positions:\n" << pos;
 
+    verbose() << '\n';
+
     auto rec = pos[0];
-    verbose() << '(' << rec["xpos"] << ',' << rec["ypos"] << ")\n";
+    verbose() << "node " << rec["node"] << ": (" << rec["xpos"] << ','
+              << rec["ypos"] << ")\n";
 
     auto xpos = pos.values<double>("xpos");
-    verbose() << "x =";
+    verbose() << "x positions:";
     for (auto &x : xpos) {
         verbose() << ' ' << x;
+    }
+    verbose() << '\n';
+
+    auto ypos = pos.where<double>("ypos", [&](double y) { return y == 0; });
+    verbose() << "nodes with y=0:";
+    for (auto &y : ypos) {
+        verbose() << ' ' << pos[y]["node"];
     }
     verbose() << '\n';
 
