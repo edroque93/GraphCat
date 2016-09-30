@@ -11,6 +11,11 @@ OBJECTS = $(SOURCES:src/%.cpp=obj/%.o)
 DEPFILES = $(SOURCES:src/%.cpp=obj/%.deps)
 EXECUTABLE = graphcat
 
+CFORMAT = $(shell which clang-format >/dev/null 2>&1 \
+		  && echo clang-format || echo clang-format-3.8)
+
+.PHONY: all clean format
+
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS) $(DEPFILES)
@@ -31,5 +36,5 @@ obj/%.deps: src/%.cpp
 clean:
 	@rm -rf $(EXECUTABLE) obj
 
-qformat:
-	@clang-format-3.8 -i $(SOURCES) $(shell find src/ -name *.hpp)
+format:
+	@$(CFORMAT) -i $(SOURCES) $(shell find src/ -name *.hpp)
