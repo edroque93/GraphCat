@@ -1,8 +1,8 @@
 #pragma once
 
+#include <functional>
 #include <string>
 #include <vector>
-#include <functional>
 
 #include "../utils/stringops.hpp"
 
@@ -62,16 +62,7 @@ class database {
         return get<T>(i, index(label));
     }
 
-    template <class T, class U>
-    std::vector<size_t> where(U j, std::function<bool(T)> test) {
-        std::vector<size_t> vec;
-        for (size_t i = 0; i < nrows; ++i) {
-            if (test(get<T>(i, j))) {
-                vec.push_back(i);
-            }
-        }
-        return std::move(vec);
-    }
+    std::vector<size_t> where(std::function<bool(const record &)> pred);
 
     static database read_csv(const std::string &filename);
 

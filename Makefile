@@ -3,7 +3,7 @@ CFLAGS_Debug = -g
 CFLAGS_Release = -O2
 
 CXX = g++
-CFLAGS = -std=c++0x $(CFLAGS_${VERSION})
+CFLAGS = -std=c++11 $(CFLAGS_${VERSION})
 LDFLAGS = -lgsl -lgslcblas -lcairo
 WARNINGS = -Wall -Wno-unused-variable
 SOURCES = $(shell find src/ -name *.cpp)

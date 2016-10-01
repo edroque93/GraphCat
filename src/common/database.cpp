@@ -61,13 +61,13 @@ void database::save_csv(const string &filename, char delim) {
     for (size_t j = 0; j < ncols - 1; ++j) {
         ofs << header[j] << delim;
     }
-    ofs << header[ncols-1] << '\n';
+    ofs << header[ncols - 1] << '\n';
 
     for (size_t i = 0; i < nrows; ++i) {
         for (size_t j = 0; j < ncols - 1; ++j) {
-            ofs << at(i,j) << delim;
+            ofs << at(i, j) << delim;
         }
-        ofs << at(i, ncols-1) << '\n';
+        ofs << at(i, ncols - 1) << '\n';
     }
 }
 
@@ -76,8 +76,18 @@ const string &database::at(size_t i, size_t j) const {
     return data[i * ncols + j];
 }
 
-const std::string &database::at(size_t i, const std::string &label) const {
+const string &database::at(size_t i, const string &label) const {
     return at(i, index(label));
+}
+
+vector<size_t> database::where(function<bool(const record &)> pred) {
+    vector<size_t> vec;
+    for (size_t i = 0; i < nrows; ++i) {
+        if (pred((*this)[i])) {
+            vec.push_back(i);
+        }
+    }
+    return move(vec);
 }
 
 ostream &operator<<(ostream &os, const database &db) {
