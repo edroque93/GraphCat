@@ -7,6 +7,7 @@ CFLAGS = -std=c++11 $(CFLAGS_${VERSION})
 LDFLAGS = -lgsl -lgslcblas -lcairo
 WARNINGS = -Wall -Wno-unused-variable
 SOURCES = $(shell find src/ -name *.cpp)
+HEADERS = $(shell find src/ -name *.hpp)
 OBJECTS = $(SOURCES:src/%.cpp=obj/%.o)
 DEPFILES = $(SOURCES:src/%.cpp=obj/%.deps)
 EXECUTABLE = graphcat
@@ -37,4 +38,4 @@ clean:
 	@rm -rf $(EXECUTABLE) obj
 
 format:
-	@$(CFORMAT) -i $(SOURCES) $(shell find src/ -name *.hpp)
+	@$(CFORMAT) -i $(SOURCES) $(HEADERS)
