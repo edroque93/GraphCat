@@ -7,16 +7,17 @@
 
 using namespace std;
 
-size_t database::index(const string &label) const {
-    auto it = find(header.begin(), header.end(), label);
-    if (it == header.end())
-        throw runtime_error("label " + label + " not found");
+const std::string &database::at(size_t i, size_t j) const {
+    return data[i * ncols + j];
+}
+
+size_t database::index(const string &key) const {
+    auto it = find(header.begin(), header.end(), key);
     return it - header.begin();
 }
 
-const string &database::label(size_t j) const {
-    if (j >= ncols) throw runtime_error("index out of bounds");
-    return header[j];
+size_t database::index(size_t key) const {
+    return key;
 }
 
 database::record database::operator[](size_t i) const {
@@ -69,15 +70,6 @@ void database::save_csv(const string &filename, char delim) {
         }
         ofs << at(i, ncols - 1) << '\n';
     }
-}
-
-const string &database::at(size_t i, size_t j) const {
-    if (i >= nrows || j >= ncols) throw runtime_error("index out of bounds");
-    return data[i * ncols + j];
-}
-
-const string &database::at(size_t i, const string &label) const {
-    return at(i, index(label));
 }
 
 vector<size_t> database::where(function<bool(const record &)> pred) {

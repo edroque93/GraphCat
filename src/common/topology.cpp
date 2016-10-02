@@ -12,6 +12,13 @@
 
 using namespace std;
 
+gsl_matrix *topology::copy_matrix() const {
+    gsl_matrix *cpy = gsl_matrix_alloc(size(), size());
+    if (cpy == NULL) throw runtime_error("unable to allocate matrix");
+    gsl_matrix_memcpy(cpy, matrix);
+    return cpy;
+}
+
 topology::~topology() {
     if (matrix != nullptr) gsl_matrix_free(matrix);
 }

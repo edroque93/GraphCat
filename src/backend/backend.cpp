@@ -1,6 +1,15 @@
 #include "backend.hpp"
 
+#include <exception>
+
 using namespace std;
+
+template <>
+backend::img_format str_as(const std::string &str) {
+    if (str == "svg") return backend::img_format::SVG;
+    if (str == "png") return backend::img_format::PNG;
+    throw runtime_error("unknown image format " + str);
+}
 
 void backend::plot(const database &format) {
     for (size_t i = 0; i < format.rows(); ++i) {
@@ -8,36 +17,11 @@ void backend::plot(const database &format) {
         string filename;
         img_format ext;
         auto rec = format[i];
-        try {
-            width = rec.get<int>("width");
-        } catch (...) {
-            width = default_width;
-        };
-        try {
-            height = rec.get<int>("height");
-        } catch (...) {
-            height = default_height;
-        };
-        try {
-            margin = rec.get<int>("margin");
-        } catch (...) {
-            margin = default_margin;
-        };
-        try {
-            filename = rec.get<string>("filename");
-        } catch (...) {
-            filename = "plot_" + to_string(i);
-        };
-        try {
-            if (!rec.get<string>("format").compare("svg")) {
-                ext = SVG;
-            } else if (!rec.get<string>("format").compare("png")) {
-                ext = PNG;
-            } else
-                throw;
-        } catch (...) {
-            ext = default_format;
-        };
+        width = rec.get<int>("width", default_width);
+        height = rec.get<int>("height", default_height);
+        margin = rec.get<int>("margin", default_margin);
+        filename = rec.get<string>("filename", "plot_" + to_string(i));
+        ext = rec.get<img_format>("format", default_format);
         do_plot(width, height, margin, filename, ext);
     }
 }

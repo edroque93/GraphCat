@@ -36,26 +36,8 @@ int main(int argc, char **argv) try {
 
     verbose() << "Topology:\n" << topo;
     verbose() << "Positions:\n" << pos;
+    verbose() << "Format:\n" << fmt;
 
-    verbose() << '\n';
-
-    auto rec = pos[0];
-    verbose() << "node " << rec["node"] << ": (" << rec["xpos"] << ','
-              << rec["ypos"] << ")\n";
-
-    auto xpos = pos.values<double>("xpos");
-    verbose() << "x positions:";
-    for (auto &x : xpos) {
-        verbose() << ' ' << x;
-    }
-    verbose() << '\n';
-
-    auto ypos = pos.where(
-        [&](const database::record &r) { return r.get<double>("ypos") == 0; });
-    verbose() << "nodes with y=0:";
-    for (auto &y : ypos) {
-        verbose() << ' ' << pos[y]["node"];
-    }
     verbose() << '\n';
 
     backend b = backend(topo, pos.values<double>("xpos"),

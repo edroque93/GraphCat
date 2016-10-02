@@ -24,6 +24,8 @@ class topology {
         return gsl_matrix_get(matrix, i, j);
     }
 
+    gsl_matrix *copy_matrix() const;
+
     static topology read_csv(const std::string &filename);
     static topology read_dat(const std::string &filename);
 
