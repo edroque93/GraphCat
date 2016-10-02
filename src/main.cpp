@@ -13,6 +13,7 @@ using namespace std;
 option_list opts = {
     {"topo", "Topology file"},
     {"pos", "Positions for each node"},
+    {"fmt", "Output file(s) format"},
     {"verbose", "Verbose output", "yes"},
 };
 
@@ -31,6 +32,7 @@ int main(int argc, char **argv) try {
 
     topology topo = topology::read_csv(opts.get<string>("topo"));
     database pos = database::read_csv(opts.get<string>("pos"));
+    database fmt = database::read_csv(opts.get<string>("fmt"));
 
     verbose() << "Topology:\n" << topo;
     verbose() << "Positions:\n" << pos;
@@ -56,6 +58,9 @@ int main(int argc, char **argv) try {
     }
     verbose() << '\n';
 
+    backend b = backend(topo, pos.values<double>("xpos"),
+                        pos.values<double>("ypos"), pos);
+    b.plot(fmt);
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;
     return EXIT_FAILURE;
