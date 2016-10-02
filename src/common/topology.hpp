@@ -20,6 +20,9 @@ class topology {
     topology &operator=(topology &&);
 
     inline size_t size() const { return matrix->size1; }
+    inline double get(size_t i, size_t j) const {
+        return gsl_matrix_get(matrix, i, j);
+    }
 
     static topology read_csv(const std::string &filename);
     static topology read_dat(const std::string &filename);
