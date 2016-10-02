@@ -2,4 +2,4 @@
 graphcat
 obj/
 *.svg
-src/.clang-format
+*.png
