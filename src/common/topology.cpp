@@ -1,7 +1,7 @@
 #include "topology.hpp"
 
-#include <stdexcept>
 #include <fstream>
+#include <stdexcept>
 
 #include <assert.h>
 #include <errno.h>

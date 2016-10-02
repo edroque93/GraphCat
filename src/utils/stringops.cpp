@@ -24,9 +24,8 @@ string str_as(const string &str) {
 template <>
 char str_as(const string &str) {
     if (str.empty()) throw runtime_error("string is empty");
-    if (str.size()>1) throw runtime_error("string is not a character");
+    if (str.size() > 1) throw runtime_error("string is not a character");
     return str.front();
-
 }
 
 template <>

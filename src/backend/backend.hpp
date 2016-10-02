@@ -2,9 +2,12 @@
 #define BACKEND_HPP
 
 #include <iostream>
+#include <vector>
 
 #include <cairo/cairo-svg.h>
 #include <math.h>
+
+#include "../common/topology.hpp"
 
 /*
  Missing stuff:
@@ -16,10 +19,8 @@
 */
 class backend {
    public:
-    backend() {}
-    backend(int width, int height);
-    backend(int width, int height, int margin);
-    // something something G(N,E)
+    backend(const topology &topo, const std::vector<double> &vx,
+            const std::vector<double> &vy);
     ~backend() {}
     void doTheThing();
 

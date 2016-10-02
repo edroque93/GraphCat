@@ -48,9 +48,8 @@ int main(int argc, char **argv) try {
     }
     verbose() << '\n';
 
-    auto ypos = pos.where([&](const database::record &r) {
-        return r.get<double>("ypos") == 0;
-    });
+    auto ypos = pos.where(
+        [&](const database::record &r) { return r.get<double>("ypos") == 0; });
     verbose() << "nodes with y=0:";
     for (auto &y : ypos) {
         verbose() << ' ' << pos[y]["node"];

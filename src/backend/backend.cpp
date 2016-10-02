@@ -1,15 +1,8 @@
 #include "backend.hpp"
 
-backend::backend(int width, int height) {
-    this->width = width;
-    this->height = height;
-    this->margin = default_margin;
-}
-
-backend::backend(int width, int height, int margin) {
-    this->width = width;
-    this->height = height;
-    this->margin = margin;
+backend::backend(const topology &topo, const std::vector<double> &vx,
+                 const std::vector<double> &vy) {
+    
 }
 
 void backend::doTheThing() {
