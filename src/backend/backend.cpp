@@ -58,11 +58,6 @@ void backend::do_plot(int width, int height, int margin, const string &filename,
     cairo_t *cr = cairo_create(surface);
     cairo_set_line_width(cr, 1.0);
 
-    if (ext == PNG) {
-        string name = filename + ".png";
-        cairo_surface_write_to_png(surface, name.c_str());
-    }
-
     for (size_t i = 0; i < topo.size(); ++i) {
         int nodex = margin + (width - margin * 2) * vx[i];
         int nodey = margin + (height - margin * 2) * vy[i];
@@ -77,6 +72,11 @@ void backend::do_plot(int width, int height, int margin, const string &filename,
                 cairo_stroke(cr);
             }
         }
+    }
+
+    if (ext == PNG) {
+        string name = filename + ".png";
+        cairo_surface_write_to_png(surface, name.c_str());
     }
 
     cairo_surface_flush(surface);
