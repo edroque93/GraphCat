@@ -1,8 +1,87 @@
 #include "backend.hpp"
 
-backend::backend(const topology &topo, const std::vector<double> &vx,
-                 const std::vector<double> &vy) {
+using namespace std;
+
+void backend::plot(const database &format) {
+    for (size_t i = 0; i < format.rows(); ++i) {
+        int width, height, margin;
+        string filename;
+        img_format ext;
+        auto rec = format[i];
+        try {
+            width = rec.get<int>("width");
+        } catch (...) {
+            width = default_width;
+        };
+        try {
+            height = rec.get<int>("height");
+        } catch (...) {
+            height = default_height;
+        };
+        try {
+            margin = rec.get<int>("margin");
+        } catch (...) {
+            margin = default_margin;
+        };
+        try {
+            filename = rec.get<string>("filename");
+        } catch (...) {
+            filename = "plot_" + to_string(i);
+        };
+        try {
+            if (!rec.get<string>("format").compare("svg")) {
+                ext = SVG;
+            } else if (!rec.get<string>("format").compare("png")) {
+                ext = PNG;
+            } else
+                throw;
+        } catch (...) {
+            ext = default_format;
+        };
+        do_plot(width, height, margin, filename, ext);
+    }
+}
+
+void backend::do_plot(int width, int height, int margin, const string &filename,
+                      img_format ext) {
+    cairo_surface_t *surface;
+    switch (ext) {
+        case PNG:
+            surface =
+                cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+            break;
+        case SVG:
+        default:
+            string name = filename + ".svg";
+            surface = cairo_svg_surface_create(name.c_str(), width, height);
+    }
+    cairo_t *cr = cairo_create(surface);
+    cairo_set_line_width(cr, 1.0);
+
+    if (ext == PNG) {
+        string name = filename + ".png";
+        cairo_surface_write_to_png(surface, name.c_str());
+    }
     
+    for (size_t i = 0; i < topo.size(); ++i) {
+        int nodex = margin + (width - margin * 2) * vx[i];
+        int nodey = margin + (height - margin * 2) * vy[i];
+        cairo_arc(cr, nodex, nodey, 7.0, 0.0, M_PI * 2.0);
+        cairo_fill(cr);
+        cairo_stroke(cr);
+        for (size_t j = i; j < topo.size(); ++j) {
+            if (topo.get(i, j)) {
+                cairo_move_to(cr, nodex, nodey);
+                cairo_line_to(cr, margin + (width - margin * 2) * vx[j],
+                              margin + (height - margin * 2) * vy[j]);
+                cairo_stroke(cr);
+            }
+        }
+    }
+
+    cairo_surface_flush(surface);
+    cairo_surface_destroy(surface);
+    cairo_destroy(cr);
 }
 
 void backend::doTheThing() {
