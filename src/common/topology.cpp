@@ -1,6 +1,6 @@
 #include "topology.hpp"
 
-#include <exception>
+#include <stdexcept>
 #include <fstream>
 
 #include <assert.h>
