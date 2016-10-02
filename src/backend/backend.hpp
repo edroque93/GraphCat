@@ -18,7 +18,7 @@ class backend {
 
     backend(const topology &topo, const std::vector<double> &vx,
             const std::vector<double> &vy, const database &attrib)
-        : topo(topo), vx(vx), vy(vy), attrib(attrib) {};
+        : topo(topo), vx(vx), vy(vy), attrib(attrib){};
     ~backend() {}
     void plot(const database &format);
     void doTheThing();

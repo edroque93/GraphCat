@@ -62,7 +62,7 @@ void backend::do_plot(int width, int height, int margin, const string &filename,
         string name = filename + ".png";
         cairo_surface_write_to_png(surface, name.c_str());
     }
-    
+
     for (size_t i = 0; i < topo.size(); ++i) {
         int nodex = margin + (width - margin * 2) * vx[i];
         int nodey = margin + (height - margin * 2) * vy[i];
