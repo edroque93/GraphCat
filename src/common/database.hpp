@@ -7,6 +7,7 @@
 
 #include "../utils/stringops.hpp"
 
+// TODO does database need to be 'immutable'?
 class database {
     std::vector<std::string> header = {};
     std::vector<std::string> data = {};

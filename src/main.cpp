@@ -4,6 +4,8 @@
 #include "backend/backend.hpp"
 #include "common/database.hpp"
 #include "common/topology.hpp"
+// TODO common or utils?
+#include "common/config.hpp"
 #include "utils/log.hpp"
 #include "utils/option.hpp"
 

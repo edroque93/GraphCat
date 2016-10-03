@@ -39,3 +39,9 @@ clean:
 
 format:
 	@$(CFORMAT) -i $(SOURCES) $(HEADERS)
+
+todo: $(SOURCES:%=todo/%) $(HEADERS:%=todo/%)
+
+todo/%: %
+	@grep -nH -e TODO $< | sed 's/\s*\/\/\/*\s*TODO\s*/ /'
+
