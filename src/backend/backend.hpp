@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <stdexcept>
 
 #include <cairo/cairo-svg.h>
 #include <math.h>

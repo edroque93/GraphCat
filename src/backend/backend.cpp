@@ -1,7 +1,5 @@
 #include "backend.hpp"
 
-#include <exception>
-
 using namespace std;
 
 template <>
