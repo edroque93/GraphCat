@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <map>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 #include <cairo/cairo-svg.h>
 #include <math.h>
@@ -36,6 +36,8 @@ class backend {
 
     void do_plot(int width, int height, int margin, const std::string &filename,
                  img_format ext);
+    void draw_arrow(cairo_t *cr, double x1, double y1, double x2, double y2,
+                    double offset);
 };
 
 #endif
