@@ -16,9 +16,7 @@ size_t database::index(const string &key) const {
     return it - header.begin();
 }
 
-size_t database::index(size_t key) const {
-    return key;
-}
+size_t database::index(size_t key) const { return key; }
 
 database::record database::operator[](size_t i) const {
     if (i >= nrows) throw runtime_error("index out of bounds");

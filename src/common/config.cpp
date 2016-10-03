@@ -24,7 +24,8 @@ void config::save_ini(const string &filename) {
 
 bool config::has_section(const string &) const {
     // TODO Fill in code for config::has_section
-    return false; }
+    return false;
+}
 
 config::section config::operator[](const string &name) const {
     // TODO Fill in code for config::operator[]
