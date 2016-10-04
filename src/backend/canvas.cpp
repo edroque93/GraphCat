@@ -36,23 +36,19 @@ canvas::img_format str_as(const std::string &str) {
 }
 
 void canvas::watermark() {
+    const char *text = "GraphCat";
+    double x, y;
+    cairo_text_extents_t extents;
     cairo_save(cr);
     cairo_set_source_rgba(cr, 1, 1, 1, 0.3);
     cairo_rotate(cr, -45 * (M_PI / 180));
     cairo_translate(cr, -width / 2, height / 4);
-    cairo_text_extents_t extents;
-
-    const char *text = "GraphCat";
-    double x, y;
-
     cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
                            CAIRO_FONT_WEIGHT_NORMAL);
-
     cairo_set_font_size(cr, height * 120.0 / 512);
     cairo_text_extents(cr, text, &extents);
     x = width / 2 - (extents.width / 2 + extents.x_bearing);
     y = height / 2 - (extents.height / 2 + extents.y_bearing);
-
     cairo_move_to(cr, x, y);
     cairo_show_text(cr, text);
     cairo_restore(cr);
