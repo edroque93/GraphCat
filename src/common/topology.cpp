@@ -103,6 +103,16 @@ topology topology::read_csv(const string &filename) {
     return top;
 }
 
+void topology::fix_identity() {
+    for (size_t i = 0; i < size(); ++i) {
+        for (size_t j = 0; j < size() - 1; ++j) {
+            bool val = (gsl_matrix_get(matrix, i, j) != 0) |
+                       (gsl_matrix_get(matrix, j, i) != 0);
+            gsl_matrix_set(matrix, i, j, val);
+        }
+    }
+}
+
 void topology::save_csv(const string &filename, char delim) {
     std::ofstream ofs(filename);
     for (size_t i = 0; i < size(); ++i) {
