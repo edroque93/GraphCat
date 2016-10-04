@@ -1,3 +1,2 @@
 width height margin filename format
-512   512    32     out      svg
-512   512    32     out      png
+256   256    16     out      svg
