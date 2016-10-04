@@ -4,6 +4,7 @@
 #include "backend/backend.hpp"
 #include "common/database.hpp"
 #include "common/topology.hpp"
+#include "compute/compute.hpp"
 // TODO common or utils?
 #include "common/config.hpp"
 #include "utils/log.hpp"
@@ -42,9 +43,15 @@ int main(int argc, char **argv) try {
 
     verbose() << '\n';
 
-    backend b = backend(topo, pos.values<double>("xpos"),
-                        pos.values<double>("ypos"), pos);
+    topo.fix_identity();  // Im lazy
+    verbose() << "Topology:\n" << topo;
+    vector<double> x, y;
+    compute c(topo);
+    c.generate_eigenvectors(x, y);
+
+    backend b = backend(topo, x, y, pos);
     b.plot(fmt);
+
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;
     return EXIT_FAILURE;
