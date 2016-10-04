@@ -21,7 +21,7 @@ void backend::do_plot(int width, int height, int margin) {
     cairo->watermark();
     const double node_radius = 7.0;
     for (size_t i = 0; i < topo.size(); ++i) {
-        cairo->rgba(vx[i], vx[i], vx[i], 1);
+        cairo->rgba(0, 0, 0, 1);
         int nodex = margin + (width - margin * 2) * vx[i];
         int nodey = margin + (height - margin * 2) * vy[i];
         cairo->draw_point(nodex, nodey, node_radius);
