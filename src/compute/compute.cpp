@@ -1,6 +1,7 @@
 #include "compute.hpp"
 
 #include <gsl/gsl_vector.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -31,52 +32,20 @@ void compute::generate_eigenvectors(std::vector<double> &vx,
     gsl_matrix *e_vec = gsl_matrix_alloc(dimension, dimension);
     gsl_eigen_symmv_workspace *workspace = gsl_eigen_symmv_alloc(dimension);
     gsl_eigen_symmv(diagonal, e_val, e_vec, workspace);
-    gsl_eigen_symmv_free(workspace);
+    gsl_eigen_symmv_sort(e_val, e_vec, GSL_EIGEN_SORT_VAL_ASC);
 
-    // Retrieve 2nd and 3rd eigenvector
+    // Retrieve 2nd and 3rd eigenvector (ASC)
 
     gsl_vector_view vx_vv = gsl_matrix_column(e_vec, 1);
     gsl_vector_view vy_vv = gsl_matrix_column(e_vec, 2);
 
-    // Normalize to 0..1
+    // Normalize to 0..1 and add to vectors
 
     for (size_t i = 0; i < dimension; ++i) {
-        vx_vv.vector.data[i] = (1 + vx_vv.vector.data[i]) / 2;
-        vy_vv.vector.data[i] = (1 + vy_vv.vector.data[i]) / 2;
+        vx.push_back((1 + gsl_vector_get(&vx_vv.vector, i)) / 2);
+        vy.push_back((1 + gsl_vector_get(&vy_vv.vector, i)) / 2);
     }
 
-    vx.insert(vx.end(), &vx_vv.vector.data[0], &vx_vv.vector.data[dimension]);
-    vy.insert(vy.end(), &vy_vv.vector.data[0], &vy_vv.vector.data[dimension]);
-
+    gsl_eigen_symmv_free(workspace);
     // TODO Free allocs here xdddd
 }
-
-/*
-Online octave check:
-
-A=[0,1,1,0;1,0,0,1;1,0,0,1;0,1,1,0];
-D=[2,0,0,0;0,2,0,0;0,0,2,0;0,0,0,2];
-L=D-A;
-disp(D);
-disp(L);
-[v, e] = eigs(L);
-disp(v)
-
---
-
-   2   0   0   0
-   0   2   0   0
-   0   0   2   0
-   0   0   0   2
-
-   2  -1  -1   0
-  -1   2   0  -1
-  -1   0   2  -1
-   0  -1  -1   2
-
-   0.50000   0.67458  -0.21200   0.50000
-  -0.50000   0.21200   0.67458   0.50000
-  -0.50000  -0.21200  -0.67458   0.50000
-   0.50000  -0.67458   0.21200   0.50000
-
-*/
