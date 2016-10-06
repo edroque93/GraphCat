@@ -1,10 +1,13 @@
 #pragma once
 
+#include <algorithm>
 #include <ostream>
 #include <string>
 #include <vector>
 
 #include <gsl/gsl_matrix.h>
+
+#include "../builder/node.hpp"
 
 class topology {
     gsl_matrix *matrix = nullptr;
@@ -27,6 +30,7 @@ class topology {
     void fix_identity();
     gsl_matrix *copy_matrix() const;
 
+    static topology generate_topology(const std::vector<node *> &graph);
     static topology read_csv(const std::string &filename);
     static topology read_dat(const std::string &filename);
 

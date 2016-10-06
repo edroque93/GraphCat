@@ -56,6 +56,27 @@ topology &topology::operator=(topology &&other) {
     return *this;
 }
 
+topology topology::generate_topology(const vector<node *> &graph) {
+    topology top;
+    size_t size = graph.size();
+    gsl_matrix *mat = gsl_matrix_alloc(size, size);
+    if (mat == NULL) throw runtime_error("unable to allocate matrix");
+
+    gsl_matrix_set_zero(mat);
+
+    size_t i = 0;
+    for (node *n : graph) {
+        for (node *c : n->connections) {
+            auto j = find(graph.begin(), graph.end(), c);
+            gsl_matrix_set(mat, i, j - graph.begin(), 1);
+        }
+        ++i;
+    }
+
+    top.matrix = mat;
+    return top;
+}
+
 topology topology::read_csv(const string &filename) {
     topology top;
     string line;
