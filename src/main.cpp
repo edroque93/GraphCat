@@ -10,6 +10,9 @@
 #include "utils/log.hpp"
 #include "utils/option.hpp"
 
+#include "builder/graph_builder.hpp"
+#include "builder/node.hpp"
+
 using namespace std;
 
 // Command line options
@@ -33,25 +36,39 @@ int main(int argc, char **argv) try {
 
     opts.parse(argc - 1, argv + 1);
 
-    topology topo = topology::read_csv(opts.get<string>("topo"));
-    database pos = database::read_csv(opts.get<string>("pos"));
-    database fmt = database::read_csv(opts.get<string>("fmt"));
+    class dummy : public node {
+       public:
+        dummy(std::string name) : name(name){};
+        std::string name;
+    };
 
-    verbose() << "Topology:\n" << topo;
-    verbose() << "Positions:\n" << pos;
-    verbose() << "Format:\n" << fmt;
+    dummy a("a"), b("b"), c("c"), d("d"), e("e"), f("f"), g("g");
+    a.connections.push_back(&c);
+    a.connections.push_back(&b);
+    a.connections.push_back(&e);
+    a.connections.push_back(&f);
+    b.connections.push_back(&a);
+    c.connections.push_back(&a);
+    c.connections.push_back(&d);
+    d.connections.push_back(&c);
+    d.connections.push_back(&e);
+    e.connections.push_back(&d);
+    e.connections.push_back(&a);
+    e.connections.push_back(&f);
+    e.connections.push_back(&g);
+    f.connections.push_back(&a);
+    f.connections.push_back(&e);
+    f.connections.push_back(&g);
+    g.connections.push_back(&e);
+    g.connections.push_back(&f);
 
-    verbose() << '\n';
-
-    topo.fix_identity();  // Im lazy
-    verbose() << "Topology:\n" << topo;
+    topology dummy_topo = topology::generate_topology(graph_builder::bfs(&a));
+    verbose() << dummy_topo;
     vector<double> x, y;
-    compute c(topo);
-    c.generate_eigenvectors(x, y);
-
-    backend b = backend(topo, x, y, pos);
-    b.plot(fmt);
-
+    compute comp(dummy_topo);
+    comp.generate_eigenvectors(x, y);
+    backend back = backend(dummy_topo, x, y, pos);
+    back.plot(fmt);
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;
     return EXIT_FAILURE;
