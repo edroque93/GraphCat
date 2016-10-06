@@ -75,8 +75,7 @@ int main(int argc, char **argv) try {
 
     topology dummy_topo = topology::generate_topology(graph_builder::bfs(&a));
     verbose() << dummy_topo;
-    vector<double> x;
-    vector<double> y;
+    vector<double> x, y;
     compute comp_eigen(dummy_topo);
     comp_eigen.generate_eigenvectors(x, y);
     backend back_eigen = backend(dummy_topo, x, y, attrib);
