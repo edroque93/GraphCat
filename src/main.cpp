@@ -14,9 +14,7 @@ using namespace std;
 
 // Command line options
 option_list opts = {
-    {"topo", "Topology file"},
-    {"pos", "Positions for each node"},
-    {"fmt", "Output file(s) format"},
+    {"config", "Configuration file"},
     {"verbose", "Verbose output", "yes"},
 };
 
@@ -33,24 +31,23 @@ int main(int argc, char **argv) try {
 
     opts.parse(argc - 1, argv + 1);
 
-    topology topo = topology::read_csv(opts.get<string>("topo"));
-    database pos = database::read_csv(opts.get<string>("pos"));
-    database fmt = database::read_csv(opts.get<string>("fmt"));
+    config cfg = config::read_ini(opts.get<string>("config"));
+    database pos; // TODO dummy object
+    
+    auto in = cfg["input"];
+    topology topo = topology::read_csv(in.get<string>("topology"));
 
+    verbose() << "Configuration:\n" << cfg;
     verbose() << "Topology:\n" << topo;
-    verbose() << "Positions:\n" << pos;
-    verbose() << "Format:\n" << fmt;
-
     verbose() << '\n';
 
     topo.fix_identity();  // Im lazy
-    verbose() << "Topology:\n" << topo;
     vector<double> x, y;
     compute c(topo);
     c.generate_eigenvectors(x, y);
 
     backend b = backend(topo, x, y, pos);
-    b.plot(fmt);
+    b.plot(cfg);
 
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;

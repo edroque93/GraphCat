@@ -33,10 +33,39 @@ bool str_as(const string &str) {
     const static vector<string> yes = {"yes", "y", "true", "t", "1"};
     const static vector<string> no = {"no", "n", "false", "f", "0"};
 
-    // TODO convert str to lower case
+    string key(str);
+    str_tolower(key);
 
-    if (find(yes.begin(), yes.end(), str) != yes.end()) return true;
-    if (find(no.begin(), no.end(), str) != no.end()) return false;
+    if (find(yes.begin(), yes.end(), key) != yes.end()) return true;
+    if (find(no.begin(), no.end(), key) != no.end()) return false;
 
     throw runtime_error(str + " is not a boolean value");
+}
+
+void str_tolower(string &str) {
+    for (char &c : str) {
+        c = tolower(c);
+    }
+}
+
+void str_toupper(string &str) {
+    for (char &c : str) {
+        c = toupper(c);
+    }
+}
+
+void str_ltrim(string &str) {
+    str.erase(str.begin(), find_if(str.begin(), str.end(),
+                                   not1(ptr_fun<int, int>(isspace))));
+}
+
+void str_rtrim(string &str) {
+    str.erase(
+        find_if(str.rbegin(), str.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        str.end());
+}
+
+void str_trim(string &str) {
+    str_rtrim(str);
+    str_ltrim(str);
 }

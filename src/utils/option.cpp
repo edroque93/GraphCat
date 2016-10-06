@@ -64,8 +64,8 @@ int option_list::parse(int argc, char **argv) {
 }
 
 void option_list::show_help(std::ostream &os) const {
-    os << "\n usage: " << __progname << " [-help] [opts] -- [args]\n\n"
-       << " options:\n";
+    os << "\n Usage: " << __progname << " [-help] [opts] -- [args]\n\n"
+       << " Options:\n";
     size_t max_len = 10;
     for (auto &opt : opts) max_len = max(max_len, opt.label.size());
     for (auto &opt : opts) {
