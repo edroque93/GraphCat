@@ -45,6 +45,11 @@ void compute::generate_eigenvectors(const topology &original,
         vy.push_back((1 + gsl_vector_get(&vy_vv.vector, i)) / 2);
     }
 
+    // Free structures
+
+    gsl_matrix_free(topo);
+    gsl_matrix_free(e_vec);
+    gsl_vector_free(e_val);
+    gsl_matrix_free(diagonal);
     gsl_eigen_symmv_free(workspace);
-    // TODO Free allocs here xdddd
 }
