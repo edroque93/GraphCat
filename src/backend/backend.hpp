@@ -7,8 +7,8 @@
 
 #include <cairo/cairo-svg.h>
 
-#include "../common/database.hpp"
 #include "../common/config.hpp"
+#include "../common/database.hpp"
 #include "../common/topology.hpp"
 #include "../utils/stringops.hpp"
 #include "canvas.hpp"

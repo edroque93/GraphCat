@@ -61,7 +61,8 @@ void str_ltrim(string &str) {
 
 void str_rtrim(string &str) {
     str.erase(
-        find_if(str.rbegin(), str.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        find_if(str.rbegin(), str.rend(), not1(ptr_fun<int, int>(isspace)))
+            .base(),
         str.end());
 }
 
