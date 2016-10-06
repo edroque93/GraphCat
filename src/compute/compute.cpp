@@ -1,12 +1,11 @@
 #include "compute.hpp"
 
-#include <gsl/gsl_vector.h>
-#include <iomanip>
-
 using namespace std;
 
-void compute::generate_eigenvectors(std::vector<double> &vx,
+void compute::generate_eigenvectors(const topology &original,
+                                    std::vector<double> &vx,
                                     std::vector<double> &vy) {
+    gsl_matrix *topo = original.copy_matrix();
     size_t dimension = topo->size1;
 
     // Weighted vector of topology in matrix diagonal

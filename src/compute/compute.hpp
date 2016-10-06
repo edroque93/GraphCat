@@ -6,20 +6,13 @@
 #include <vector>
 
 #include <gsl/gsl_eigen.h>
+#include <gsl/gsl_vector.h>
 
 #include "../common/topology.hpp"
 
-class compute {
-   public:
-    compute(const topology &topo) : topo(topo.copy_matrix()){};
-    void generate_eigenvectors(std::vector<double> &vx,
-                               std::vector<double> &vy);
-    ~compute(){
-        // TODO frees
-    };
-
-   private:
-    gsl_matrix *topo;
+namespace compute {
+void generate_eigenvectors(const topology &original, std::vector<double> &vx,
+                           std::vector<double> &vy);
 };
 
 #endif
