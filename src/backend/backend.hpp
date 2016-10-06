@@ -8,6 +8,7 @@
 #include <cairo/cairo-svg.h>
 
 #include "../common/database.hpp"
+#include "../common/config.hpp"
 #include "../common/topology.hpp"
 #include "../utils/stringops.hpp"
 #include "canvas.hpp"
@@ -18,7 +19,7 @@ class backend {
             const std::vector<double> &vy, const database &attrib)
         : topo(topo), vx(vx), vy(vy), attrib(attrib){};
     ~backend() { delete cairo; }
-    void plot(const database &format);
+    void plot(const config &cfg);
 
    private:
     const int default_margin = 32;
@@ -26,6 +27,7 @@ class backend {
     const int default_height = 512;
     const canvas::img_format default_format = canvas::img_format::SVG;
 
+    // TODO these are copies.. => make const& ?
     topology topo;
     std::vector<double> vx, vy;
     database attrib;

@@ -2,14 +2,14 @@
 
 using namespace std;
 
-void backend::plot(const database &format) {
-    // TODO Use config
-    auto rec = format[0];
-    int width = rec.get<int>("width", default_width);
-    int height = rec.get<int>("height", default_width);
-    int margin = rec.get<int>("margin", default_margin);
-    cairo = new canvas(rec.get<string>("filename", "plot"),
-                       rec.get<canvas::img_format>("format", default_format),
+void backend::plot(const config &cfg) {
+    // TODO Use custom object?
+    auto out = cfg["output"];
+    int width = out.get<int>("width", default_width);
+    int height = out.get<int>("height", default_height);
+    int margin = out.get<int>("margin", default_margin);
+    cairo = new canvas(out.get<string>("filename", "plot"),
+                       out.get<canvas::img_format>("type", default_format),
                        width, height);
     do_plot(width, height, margin);
 }

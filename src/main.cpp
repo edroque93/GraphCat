@@ -17,10 +17,7 @@ using namespace std;
 
 // Command line options
 option_list opts = {
-    {"topo", "Topology file"},
-    {"pos", "Positions for each node"},
-    {"fmt", "Output file(s) format"},
-    {"verbose", "Verbose output", "yes"},
+    {"config", "Configuration file"}, {"verbose", "Verbose output", "yes"},
 };
 
 ostream &verbose() {
@@ -35,6 +32,20 @@ int main(int argc, char **argv) try {
     }
 
     opts.parse(argc - 1, argv + 1);
+
+    config cfg = config::read_ini(opts.get<string>("config"));
+    database attrib;  // TODO dummy object
+
+    auto in = cfg["input"];
+    topology topo = topology::read_csv(in.get<string>("topology"));
+
+    verbose() << "Configuration:\n" << cfg;
+    verbose() << "Topology:\n" << topo;
+    verbose() << '\n';
+
+    //
+    // Object test --side quest--
+    //
 
     class dummy : public node {
        public:
@@ -64,11 +75,16 @@ int main(int argc, char **argv) try {
 
     topology dummy_topo = topology::generate_topology(graph_builder::bfs(&a));
     verbose() << dummy_topo;
-    vector<double> x, y;
-    compute comp(dummy_topo);
-    comp.generate_eigenvectors(x, y);
-    backend back = backend(dummy_topo, x, y, pos);
-    back.plot(fmt);
+    vector<double> x;
+    vector<double> y;
+    compute comp_eigen(dummy_topo);
+    comp_eigen.generate_eigenvectors(x, y);
+    backend back_eigen = backend(dummy_topo, x, y, attrib);
+    back_eigen.plot(cfg);
+
+    //
+    // -----
+    //
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;
     return EXIT_FAILURE;

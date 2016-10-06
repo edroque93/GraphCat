@@ -24,6 +24,7 @@ class config {
         const std::string &operator[](const std::string &) const;
         bool is_set(const std::string &key) const;
 
+        // TODO this can be optimized..
         template <class T>
         T get(const std::string &key) const {
             if (!is_set(key)) throw std::runtime_error(key + " not set");
@@ -41,4 +42,6 @@ class config {
 
     bool has_section(const std::string &) const;
     section operator[](const std::string &) const;
+
+    friend std::ostream &operator<<(std::ostream &os, const config &cfg);
 };

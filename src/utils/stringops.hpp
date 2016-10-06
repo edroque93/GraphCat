@@ -3,6 +3,13 @@
 #include <string>
 #include <vector>
 
+void str_tolower(std::string &);
+void str_toupper(std::string &);
+
+void str_rtrim(std::string &);
+void str_ltrim(std::string &);
+void str_trim(std::string &);
+
 template <class T>
 T str_as(const std::string &str);
 
