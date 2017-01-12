@@ -124,6 +124,16 @@ topology topology::read_csv(const string &filename) {
     return top;
 }
 
+std::vector<size_t> topology::get_neighbours(size_t i) const {
+    std::vector<size_t> ns;
+    for (size_t j = 0; j < size(); ++j) {
+        if (is_neighbour(i,j)) {
+            ns.push_back(j);
+        }
+    }
+    return ns;
+}
+
 void topology::fix_identity() {
     for (size_t i = 0; i < size(); ++i) {
         for (size_t j = 0; j < size(); ++j) {

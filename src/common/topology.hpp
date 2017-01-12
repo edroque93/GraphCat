@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -8,6 +9,8 @@
 #include <gsl/gsl_matrix.h>
 
 #include "../builder/node.hpp"
+
+typedef std::array<double, 2> vec2;
 
 class topology {
     gsl_matrix *matrix = nullptr;
@@ -22,10 +25,12 @@ class topology {
     topology(topology &&);
     topology &operator=(topology &&);
 
-    inline size_t size() const { return matrix->size1; }
-    inline double get(size_t i, size_t j) const {
+    size_t size() const { return matrix->size1; }
+    double get(size_t i, size_t j) const {
         return gsl_matrix_get(matrix, i, j);
     }
+    bool is_neighbour(size_t i, size_t j) const { return get(i, j) > 0; }
+    std::vector<size_t> get_neighbours(size_t i) const;
 
     void fix_identity();
     gsl_matrix *copy_matrix() const;

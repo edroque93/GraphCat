@@ -2,6 +2,10 @@ VERSION ?= Debug
 CFLAGS_Debug = -g
 CFLAGS_Release = -O2
 
+VERBOSE ?= 0
+VERBOSE_0=@
+V=$(VERBOSE_$(VERBOSE))
+
 CXX = g++
 CFLAGS = -std=c++11 $(CFLAGS_${VERSION})
 LDFLAGS = -lgsl -lgslcblas -lcairo
@@ -21,16 +25,16 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS) $(DEPFILES)
 	@echo Linking
-	@$(CXX) $(OBJECTS) -o $(EXECUTABLE) $(LDFLAGS)
+	$V$(CXX) $(OBJECTS) -o $(EXECUTABLE) $(LDFLAGS)
 
 obj/%.o: src/%.cpp
 	@echo Compiling $<
 	@mkdir -p $(@D)
-	@$(CXX) -c $< -o $@ $(CFLAGS) $(WARNINGS)
+	$V$(CXX) $(CFLAGS) -c $(WARNINGS) -o $@ $<
 
 obj/%.deps: src/%.cpp
 	@mkdir -p $(@D)
-	@$(CXX) -MM -MT $(@:%.deps=%.o) $< > $@
+	@$(CXX) $(CFLAGS) -MM -MT $(@:%.deps=%.o) $< > $@
 
 -include $(DEPFILES)
 

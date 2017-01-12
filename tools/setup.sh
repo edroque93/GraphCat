@@ -3,4 +3,4 @@ export PATH=$PATH:$GCAT
 
 alias gcat=graphcat
 
-. tools/compl.sh
+# . tools/compl.sh

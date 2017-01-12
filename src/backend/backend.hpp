@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include <cairo/cairo-svg.h>
@@ -15,8 +16,8 @@
 
 namespace backend {
 void plot(const config &cfg, const topology &topo,
-          const std::vector<double> &vx, const std::vector<double> &vy,
-          const database &attrib);
+          const std::vector<vec2> &points, const database &attrib,
+          std::string suffix = "");
 
 const int default_margin = 32;
 const int default_width = 512;
