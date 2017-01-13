@@ -11,6 +11,7 @@
 #include "../common/config.hpp"
 #include "../common/database.hpp"
 #include "../common/topology.hpp"
+#include "../compute/vector.hpp"
 #include "../utils/stringops.hpp"
 #include "canvas.hpp"
 

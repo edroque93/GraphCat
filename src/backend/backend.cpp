@@ -18,26 +18,26 @@ void backend::plot(const config &cfg, const topology &topo,
     const double node_radius = 7.0;
     for (size_t i = 0; i < topo.size(); ++i) {
         cairo.rgba(0, 0, 0, 1);
-        int nodex = margin + (width - margin * 2) * points[i][0];
-        int nodey = margin + (height - margin * 2) * points[i][1];
+        int nodex = margin + (width - margin * 2) * points[i].x;
+        int nodey = margin + (height - margin * 2) * points[i].y;
         cairo.draw_point(nodex, nodey, node_radius);
         for (size_t j = i; j < topo.size(); ++j) {
             if (topo.get(i, j) && topo.get(j, i)) {
-                int nodex_end = margin + (width - margin * 2) * points[j][0];
-                int nodey_end = margin + (height - margin * 2) * points[j][1];
+                int nodex_end = margin + (width - margin * 2) * points[j].x;
+                int nodey_end = margin + (height - margin * 2) * points[j].y;
                 cairo.draw_line(nodex, nodey, nodex_end, nodey_end);
                 continue;
             }
             if (topo.get(i, j) && !topo.get(j, i)) {
-                int nodex_end = margin + (width - margin * 2) * points[j][0];
-                int nodey_end = margin + (height - margin * 2) * points[j][1];
+                int nodex_end = margin + (width - margin * 2) * points[j].x;
+                int nodey_end = margin + (height - margin * 2) * points[j].y;
                 cairo.draw_arrow(nodex, nodey, nodex_end, nodey_end,
                                  node_radius);
                 continue;
             }
             if (!topo.get(i, j) && topo.get(j, i)) {
-                int nodex_end = margin + (width - margin * 2) * points[j][0];
-                int nodey_end = margin + (height - margin * 2) * points[j][1];
+                int nodex_end = margin + (width - margin * 2) * points[j].x;
+                int nodey_end = margin + (height - margin * 2) * points[j].y;
                 cairo.draw_arrow(nodex_end, nodey_end, nodex, nodey,
                                  node_radius);
                 continue;
