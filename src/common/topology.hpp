@@ -10,8 +10,6 @@
 
 #include "../builder/node.hpp"
 
-typedef std::array<double, 2> vec2;
-
 class topology {
     gsl_matrix *matrix = nullptr;
     topology(){};

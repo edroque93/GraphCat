@@ -127,7 +127,7 @@ topology topology::read_csv(const string &filename) {
 std::vector<size_t> topology::get_neighbours(size_t i) const {
     std::vector<size_t> ns;
     for (size_t j = 0; j < size(); ++j) {
-        if (is_neighbour(i,j)) {
+        if (is_neighbour(i, j)) {
             ns.push_back(j);
         }
     }
