@@ -33,6 +33,8 @@ struct vec2 {
         return *this;
     }
 
+	vec2 operator/(vec2 b) const { return {x / b.x, y / b.y}; }
+
     vec2 operator/(double scalar) const { return {x / scalar, y / scalar}; }
 
     vec2& operator/=(double scalar) {
