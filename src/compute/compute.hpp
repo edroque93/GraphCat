@@ -9,6 +9,7 @@
 #include <gsl/gsl_vector.h>
 
 #include "../common/topology.hpp"
+#include "vector.hpp"
 
 class compute {
    private:

@@ -63,61 +63,51 @@ void compute::generate_eigenvectors() {
 void compute::update() {
     auto size = oldpos.size();
     for (size_t i = 0; i < size; ++i) {
-        vec2 v = oldpos[i];
         vec2 disp = {0, 0};
 
         // global repulsive forces
-        for (size_t j = 0; j < n; ++j) {
+        for (size_t j = 0; j < size; ++j) {
             if (i != j) {
-                vec2 u = oldpos[j];
-                vec2 delta = {u[0] - v[0], u[1] - v[1]};
+                disp += repulsive(i, j);
             }
         }
 
         // local spring forces
-        auto neighbours = topo.get_neighbours(i);
+        auto neighbours = the_topo.get_neighbours(i);
         for (auto j : neighbours) {
-            vec2 u = oldpos[j];
+            disp += spring(i, j);
         }
+        
+        newpos[i] = oldpos[i] + disp;
     }
 
-    // normalize
+    normalize();
 
     std::swap(oldpos, newpos);
 }
 
 void compute::normalize() {
-    // double x_min = std::min_element(points.begin(), points.end(),
-    //                  [&](const vec2 &a, const vec2 &b) { return a[0] < b[0];
-    //                  })[0];
-    // double x_max = std::max_element(points.begin(), points.end(),
-    //                  [&](const vec2 &a, const vec2 &b) { return a[0] > b[0];
-    //                  })[0];
-    // double y_min = std::min_element(points.begin(), points.end(),
-    //                  [&](const vec2 &a, const vec2 &b) { return a[1] < b[1];
-    //                  })[1];
-    // double y_max = std::max_element(points.begin(), points.end(),
-    //                  [&](const vec2 &a, const vec2 &b) { return a[1] > b[1];
-    //                  })[1];
-
     vec2 max = {std::numeric_limits<double>::min(),
                 std::numeric_limits<double>::min()};
     vec2 min = {std::numeric_limits<double>::max(),
                 std::numeric_limits<double>::max()};
-    for (auto &pt : points) {
-        min[0] = std::min(pt[0], min[0]);
-        max[0] = std::max(pt[0], max[0]);
-        max[1] = std::max(pt[1], min[1]);
-        max[1] = std::max(pt[1], max[1]);
+    for (auto &pt : oldpos) {
+        min.x = std::min(pt.x, min.x);
+        max.x = std::max(pt.x, max.x);
+        min.y = std::min(pt.y, min.y);
+        max.y = std::max(pt.y, max.y);
     }
 
-    vec2 delta = {max[0] - min[0], max[1] - min[1]};
-    for (auto &pt : points) {
-        pt[0] = (max[0] - pt[0]) / delta[0];
-        pt[1] = (max[1] - pt[1]) / delta[1];
+    vec2 delta = max - min;
+    for (auto &pt : oldpos) {
+        pt.x = (max.x - pt.x) / delta.x;
+        pt.y = (max.y - pt.y) / delta.y;
     }
 }
 
-vec2 compute::repulsive(size_t i, size_t j) {}
+vec2 compute::repulsive(size_t i, size_t j) {
+    vec2 d = oldpos[j] - oldpos[i];
+    return - d / d.size() * 0.01;
+}
 
 vec2 compute::spring(size_t i, size_t j) { return {0, 0}; }
