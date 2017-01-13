@@ -81,9 +81,9 @@ void compute::update() {
         newpos[i] = oldpos[i] + disp;
     }
 
-    normalize();
-
     std::swap(oldpos, newpos);
+    
+    normalize();
 }
 
 void compute::normalize() {
@@ -100,8 +100,7 @@ void compute::normalize() {
 
     vec2 delta = max - min;
     for (auto &pt : oldpos) {
-        pt.x = (max.x - pt.x) / delta.x;
-        pt.y = (max.y - pt.y) / delta.y;
+        pt = (pt - min) / delta;
     }
 }
 
