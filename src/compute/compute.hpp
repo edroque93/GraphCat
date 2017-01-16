@@ -22,15 +22,29 @@ class compute {
 
     const topology &the_topo;
 
-    void normalize();
     vec2 repulsive(size_t i, size_t j);
     vec2 spring(size_t i, size_t j);
+
+    double repulsive(double x, double w);
+    double spring(double x, double d, double w);
+
+    double spring_factor = 0.1;
+    double big_c = 0.05;
+
+    double nonzero(double d) {
+        if (d < 0) {
+            return std::min(-1e-10, d);
+        } else {
+            return std::max(1e-10, d);
+        }
+    }
 
    public:
     compute(topology &topo)
         : oldpos(points1), newpos(points2), the_topo(topo) {}
     void generate_eigenvectors();
     void update();
+    void normalize();
 
     const std::vector<vec2> &get_points() { return oldpos; }
 };

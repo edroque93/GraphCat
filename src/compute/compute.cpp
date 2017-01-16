@@ -68,22 +68,25 @@ void compute::update() {
         // global repulsive forces
         for (size_t j = 0; j < size; ++j) {
             if (i != j) {
-                disp += repulsive(i, j);
+                vec2 delta = oldpos[j] - oldpos[i];
+                disp += delta / nonzero(delta.size()) * repulsive(delta.size(), 1);
             }
         }
 
         // local spring forces
         auto neighbours = the_topo.get_neighbours(i);
         for (auto j : neighbours) {
-            disp += spring(i, j);
+            vec2 delta = oldpos[j] - oldpos[i];
+            disp += delta / nonzero(delta.size()) *
+                    spring(delta.size(), neighbours.size(), 1);
         }
-        
+
+        std::cout << i << ": Pos " << oldpos[i] << ", Disp" << disp << '\n';
+
         newpos[i] = oldpos[i] + disp;
     }
 
     std::swap(oldpos, newpos);
-    
-    normalize();
 }
 
 void compute::normalize() {
@@ -98,15 +101,17 @@ void compute::normalize() {
         max.y = std::max(pt.y, max.y);
     }
 
-    vec2 delta = max - min;
+    vec2 dv = max - min;
+    double delta = std::max(dv.x, dv.y);
     for (auto &pt : oldpos) {
         pt = (pt - min) / delta;
     }
 }
 
-vec2 compute::repulsive(size_t i, size_t j) {
-    vec2 d = oldpos[j] - oldpos[i];
-    return - d / d.size() * 0.01;
+double compute::repulsive(double x, double w) {
+    return -big_c * w * spring_factor * spring_factor / nonzero(x);
+}
+double compute::spring(double x, double d, double w) {
+    return (x - spring_factor) / nonzero(d) - repulsive(x, w);
 }
 
-vec2 compute::spring(size_t i, size_t j) { return {0, 0}; }

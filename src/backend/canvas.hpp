@@ -24,7 +24,7 @@ class canvas {
     }
     void draw_rectangle(double x, double y, double width, double height);
     void draw_arrow(double x1, double y1, double x2, double y2, double offset);
-    void draw_point(double x, double y, double r);
+    void draw_point(double x, double y, double r, size_t i);
     void draw_line(double x1, double y1, double x2, double y2);
     void draw_arrow_head(double x1, double y1, double x2, double y2,
                          double offset);

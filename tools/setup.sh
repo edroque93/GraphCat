@@ -1,5 +1,5 @@
 export GCAT=$PWD
-export PATH=$PATH:$GCAT
+export PATH=$PATH:$GCAT:$GCAT/tools
 
 alias gcat=graphcat
 

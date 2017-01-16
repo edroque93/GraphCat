@@ -12,15 +12,16 @@ void backend::plot(const config &cfg, const topology &topo,
     canvas cairo(out.get<string>("filename", "plot") + suffix,
                  out.get<canvas::img_format>("type", backend::default_format),
                  width, height);
-    cairo.rgba(0.86, 0.77, 0.87, 1.0);
+    // cairo.rgba(0.86, 0.77, 0.87, 1.0);
+    cairo.rgba(1, 1, 1, 1);
     cairo.draw_rectangle(0, 0, width, height);
-    cairo.watermark();
+    // cairo.watermark();
     const double node_radius = 7.0;
     for (size_t i = 0; i < topo.size(); ++i) {
         cairo.rgba(0, 0, 0, 1);
         int nodex = margin + (width - margin * 2) * points[i].x;
         int nodey = margin + (height - margin * 2) * points[i].y;
-        cairo.draw_point(nodex, nodey, node_radius);
+        cairo.draw_point(nodex, nodey, node_radius, i);
         for (size_t j = i; j < topo.size(); ++j) {
             if (topo.get(i, j) && topo.get(j, i)) {
                 int nodex_end = margin + (width - margin * 2) * points[j].x;
@@ -43,5 +44,11 @@ void backend::plot(const config &cfg, const topology &topo,
                 continue;
             }
         }
+    }
+    for (size_t i = 0; i < topo.size(); ++i) {
+        cairo.rgba(0, 0, 0, 1);
+        int nodex = margin + (width - margin * 2) * points[i].x;
+        int nodey = margin + (height - margin * 2) * points[i].y;
+        cairo.draw_point(nodex, nodey, node_radius, i);
     }
 }

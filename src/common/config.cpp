@@ -114,9 +114,9 @@ config::section config::operator[](const string &name) const {
 
 ostream &operator<<(ostream &os, const config &cfg) {
     for (const auto &sec : cfg.values) {
-        cout << " [" << sec.first << "]\n";
+        os << " [" << sec.first << "]\n";
         for (const auto &p : sec.second) {
-            cout << ' ' << p.first << " = " << p.second << '\n';
+            os << ' ' << p.first << " = " << p.second << '\n';
         }
     }
     return os;

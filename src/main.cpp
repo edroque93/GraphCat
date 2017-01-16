@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 #include <vector>
 
@@ -32,6 +33,8 @@ int main(int argc, char **argv) try {
     }
 
     opts.parse(argc - 1, argv + 1);
+
+    std::cout << std::fixed << std::setprecision(4);
 
     config cfg = config::read_ini(opts.get<string>("config"));
     database attrib;  // TODO dummy object
@@ -85,12 +88,14 @@ int main(int argc, char **argv) try {
 
     auto iters = cfg["compute"].get<int>("iterations");
     for (int i = 0; i < iters; ++i) {
-        system.update();
         backend::plot(cfg, topo, system.get_points(), attrib,
                       std::string("-") + std::to_string(i));
+        std::cout << "Iter " << i << '\n';
+        system.update();
     }
 
-    backend::plot(cfg, topo, system.get_points(), attrib);
+    system.normalize();
+    backend::plot(cfg, topo, system.get_points(), attrib, "-final");
 
     //
     // -----
