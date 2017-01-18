@@ -40,6 +40,64 @@
 \begin{document}
 \maketitle
 
+\begin{frame}
+\begin {enumerate}
+\item Where (class topic) ~ Global and detailed placement ~ Force directed placement (class theory)
+\item Our setup
+\item Graph drawing
+\item Initial position
+\item Iterative process
+\item Forces
+\item Repulsive
+\item Spring
+\item Parallelism
+\item Experiments modifying functions (forces)
+\item Experiments scaling topology
+\item Experiments convergence
+\item Extensions (clustering, optimizations, details that we didn’t have time to implement (but we liked), …)
+\item Conclusion
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Initial positioning}
+\centering
+\only<1>{
+$
+A=
+ \begin{pmatrix}
+  0 & 1 & 1 & 0 \\
+  1 & 0 & 0 & 1 \\
+  1 & 0 & 0 & 1 \\
+  0 & 1 & 1 & 0 \\
+ \end{pmatrix}
+$
+}
+\only<2>{
+$
+D=
+ \begin{pmatrix}
+  2 & 0 & 0 & 0 \\
+  0 & 2 & 0 & 0 \\
+  0 & 0 & 2 & 0 \\
+  0 & 0 & 0 & 2 \\
+ \end{pmatrix}
+$
+}
+\only<3>{
+Unnormalized Laplacian matrix associated with A\vspace{2em}
+$
+L=D-A=
+ \begin{pmatrix}
+  2 & -1 & -1 & 0 \\
+  -1 & 2 & 0 & -1 \\
+  -1 & 0 & 2 & -1 \\
+  0 & -1 & -1 & 2 \\
+ \end{pmatrix}
+$
+}
+
+\end{frame}
+
 \nocite{*}
 
 \begin{frame}{References}
