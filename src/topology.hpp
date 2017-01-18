@@ -42,6 +42,8 @@ class topology {
     void save_dat(const std::string &filename);
 
     friend std::ostream &operator<<(std::ostream &os, const topology &top);
+
+    std::string debug() const;
 };
 
 #endif // TOPOLOGY_HPP

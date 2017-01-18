@@ -16,7 +16,8 @@ using namespace std;
 
 // Command line options
 option_list opts = {{"config", "Configuration file"},
-                    {"topology", "Topology file"}};
+                    {"topology", "Topology file"},
+                    {"iters", "Number of iterations"}};
 
 void setup_env() { std::cout << std::fixed << std::setprecision(4); }
 
@@ -29,18 +30,18 @@ int main(int argc, char **argv) try {
     topology topo = topology::read_csv(
         opts.get<string>("topology", cfg["input"]["topology"]));
 
+    cout << "Initializing system\n";
+
     compute sys(topo);
     sys.generate_eigenvectors();
 
-    auto iters = cfg["compute"].get<int>("iterations");
+    auto iters = opts.get<int>("iters", cfg["compute"].get<int>("iterations"));
     for (int i = 0; i < iters; ++i) {
         backend::plot(cfg, topo, sys.get_points(), string("-") + to_string(i));
         cout << "Iter " << i << '\n';
         sys.update();
     }
-
-    sys.normalize();
-    backend::plot(cfg, topo, sys.get_points(), "-final");
+    backend::plot(cfg, topo, sys.get_points(), string("-") + to_string(iters));
 
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;

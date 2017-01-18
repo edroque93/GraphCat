@@ -1,6 +1,6 @@
 VERSION ?= Debug
-CFLAGS_Debug = -g
-CFLAGS_Release = -O2
+CFLAGS_Debug = -g 
+CFLAGS_Release = -O2 -DNDEBUG
 
 VERBOSE ?= 0
 VERBOSE_0=@

@@ -83,7 +83,7 @@ config config::read_ini(const string &filename) {
             }
         }
     }
-    return move(cfg);
+    return cfg;
 }
 
 void config::save_ini(const string &filename) {

@@ -6,27 +6,27 @@
 using namespace std;
 
 void compute::generate_eigenvectors() {
-    gsl_matrix *topo = the_topo.copy_matrix();
-    size_t dimension = topo->size1;
+    gsl_matrix *conmat = topo.copy_matrix();
+    size_t dimension = conmat->size1;
     points1.reserve(dimension);
     points2.reserve(dimension);
 
     // Weighted vector of topology in matrix diagonal
 
-    gsl_matrix *diagonal = gsl_matrix_alloc(topo->size1, topo->size1);
+    gsl_matrix *diagonal = gsl_matrix_alloc(conmat->size1, conmat->size1);
     if (diagonal == NULL) throw runtime_error("unable to allocate matrix");
 
     for (size_t c = 0; c < dimension; ++c) {
         double sum = 0.;
         for (size_t r = 0; r < dimension; ++r) {
-            sum += gsl_matrix_get(topo, r, c);
+            sum += gsl_matrix_get(conmat, r, c);
         }
         gsl_matrix_set(diagonal, c, c, sum);
     }
 
     // Get difference matrix
 
-    gsl_matrix_sub(diagonal, topo);
+    gsl_matrix_sub(diagonal, conmat);
 
     // Eigenvalues and eigenvectors
 
@@ -44,16 +44,18 @@ void compute::generate_eigenvectors() {
     // Normalize to 0..1 and add to vectors
 
     for (size_t i = 0; i < dimension; ++i) {
-        vec2 point = {((1 + gsl_vector_get(&vx_vv.vector, i)) / 2),
-                      ((1 + gsl_vector_get(&vy_vv.vector, i)) / 2)};
+        vec2 point = {max(0.0,((1 + gsl_vector_get(&vx_vv.vector, i)) / 2)),
+                      max(0.0,((1 + gsl_vector_get(&vy_vv.vector, i)) / 2))};
 
         points1.push_back(point);
         points2.push_back(point);
     }
 
+    printf("=======\n");
+
     // Free structures
 
-    gsl_matrix_free(topo);
+    gsl_matrix_free(conmat);
     gsl_matrix_free(e_vec);
     gsl_vector_free(e_val);
     gsl_matrix_free(diagonal);
@@ -74,7 +76,7 @@ void compute::update() {
         }
 
         // local spring forces
-        auto neighbours = the_topo.get_neighbours(i);
+        auto neighbours = topo.get_neighbours(i);
         for (auto j : neighbours) {
             vec2 delta = oldpos[j] - oldpos[i];
             disp += delta / nonzero(delta.size()) *

@@ -2,11 +2,12 @@
 
 #include <fstream>
 #include <stdexcept>
+#include <sstream>
 
-#include <assert.h>
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
+#include <cassert>
+#include <cerrno>
+#include <cstdio>
+#include <cstring>
 
 #include "support/stringops.hpp"
 
@@ -175,4 +176,10 @@ std::ostream &operator<<(ostream &os, const topology &top) {
         os << '\n';
     }
     return os;
+}
+
+string topology::debug() const {
+    stringstream ss;
+    ss << *this;
+    return ss.str();
 }

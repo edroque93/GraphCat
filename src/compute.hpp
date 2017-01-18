@@ -20,7 +20,7 @@ class compute {
     std::vector<vec2> &oldpos;
     std::vector<vec2> &newpos;
 
-    const topology &the_topo;
+    const topology &topo;
 
     vec2 repulsive(size_t i, size_t j);
     vec2 spring(size_t i, size_t j);
@@ -41,7 +41,7 @@ class compute {
 
    public:
     compute(topology &topo)
-        : oldpos(points1), newpos(points2), the_topo(topo) {}
+        : oldpos(points1), newpos(points2), topo(topo) {}
     void generate_eigenvectors();
     void update();
     void normalize();
