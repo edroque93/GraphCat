@@ -7,7 +7,7 @@ VERBOSE_0=@
 V=$(VERBOSE_$(VERBOSE))
 
 CXX = g++
-CFLAGS = -std=c++11 $(CFLAGS_${VERSION})
+CFLAGS = -std=c++11 $(CFLAGS_${VERSION}) -DGCAT_CONFIG=\"$(CURDIR)/gcat.cfg\"
 LDFLAGS = -lgsl -lgslcblas -lcairo
 WARNINGS = -Wall -Wno-unused-variable
 SOURCES = $(shell find src/ -name *.cpp)

@@ -37,6 +37,12 @@ class option_list {
     }
 
     template <class T>
+    T get(const std::string &lab, T def) const {
+        auto &val = find(lab);
+        return val.empty() ? def : str_as<T>(val);
+    }
+
+    template <class T>
     std::vector<T> get_all(const std::string &lab) const {
         auto &line = find(lab);
         return str_split<T>(line, ",; ");

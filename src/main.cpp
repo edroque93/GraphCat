@@ -8,41 +8,39 @@
 #include "support/option.hpp"
 #include "topology.hpp"
 
+#ifndef GCAT_CONFIG
+#define GCAT_CONFIG "~/.gcatrc"
+#endif
+
 using namespace std;
 
 // Command line options
-option_list opts = {
-    {"config", "Configuration file"}, {"verbose", "Verbose output", "yes"},
-};
+option_list opts = {{"config", "Configuration file"},
+                    {"topology", "Topology file"}};
+
+void setup_env() { std::cout << std::fixed << std::setprecision(4); }
 
 int main(int argc, char **argv) try {
-    if (argc == 1) {
-        opts.show_help();
-        return 0;
-    }
-
+    setup_env();
     opts.parse(argc - 1, argv + 1);
 
-    std::cout << std::fixed << std::setprecision(4);
+    config cfg = config::read_ini(opts.get<string>("config", GCAT_CONFIG));
 
-    config cfg = config::read_ini(opts.get<string>("config"));
+    topology topo = topology::read_csv(
+        opts.get<string>("topology", cfg["input"]["topology"]));
 
-    auto in = cfg["input"];
-    topology topo = topology::read_csv(in.get<string>("topology"));
-
-    compute system(topo);
-    system.generate_eigenvectors();
+    compute sys(topo);
+    sys.generate_eigenvectors();
 
     auto iters = cfg["compute"].get<int>("iterations");
     for (int i = 0; i < iters; ++i) {
-        backend::plot(cfg, topo, system.get_points(),
-                      std::string("-") + std::to_string(i));
-        std::cout << "Iter " << i << '\n';
-        system.update();
+        backend::plot(cfg, topo, sys.get_points(), string("-") + to_string(i));
+        cout << "Iter " << i << '\n';
+        sys.update();
     }
 
-    system.normalize();
-    backend::plot(cfg, topo, system.get_points(), "-final");
+    sys.normalize();
+    backend::plot(cfg, topo, sys.get_points(), "-final");
 
 } catch (const std::exception &ex) {
     cerr << "error: " << ex.what() << endl;
