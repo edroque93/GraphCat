@@ -50,7 +50,9 @@
 }
 \end{filecontents}
 
+\SetKwProg{Fn}{function}{}{end}
 \newcommand*{\describe}[1]{$\diamond$ \textbf{#1}\ }
+\DontPrintSemicolon
 
 \begin{document}
 \maketitle
@@ -81,7 +83,7 @@
 \item Repulsive and attractive forces
 \item Implementation details
 \item Extensions/Optimizations
-\item Experiments
+%\item Experiments
 \item Conclusions
 \end{enumerate}
 \end{frame}
@@ -94,6 +96,7 @@
 \item Quadratic placement
 \item Force-directed placement
 \end{itemize}
+\item Other techniques: partitioning-based, stochastic...
 \end{itemize}
 
 \centering
@@ -184,7 +187,70 @@ V=
 \end{frame}
 
 \begin{frame}{Repulsive and attractive forces}
-Foo bar
+
+\only<1>{
+\begin{center}
+After an initial positioning, forces can be applied to obtain a natural drawing\\\vspace{1em}
+\includegraphics[width=0.65\textwidth]{images/springs.png}\\\vspace{1em}
+Nodes and edges are modeled using the mechanical analogy of a mass-spring system\\\vspace{1em}
+Nodes will eventually settle in equilibrium
+\end{center}
+}
+\only<2>{
+Outline of the algorithm:\\
+\begin{center}
+\begin{minipage}{.55\linewidth}
+\begin{algorithm}[H]
+ \For{each vertex}{
+	\For{each vertex except itself}{
+	calculate repulsive forces\;
+	}
+	\For{each neighbour of vertex}{
+	calculate attractive forces\;
+	}
+	apply displacement to vertex\;
+ }
+\end{algorithm}
+\end{minipage}
+\end{center}
+}
+\only<3>{
+Outline of the repulsive force:\\
+\begin{center}
+\begin{minipage}{.55\linewidth}
+\begin{algorithm}[H]
+\Fn{Repulsive(x, w)} {
+    \Return $-C \frac{w k^2}{x} $\;
+}
+\end{algorithm}
+\end{minipage}
+\end{center}
+\begin{itemize}
+\item $x$ is the size of the $\Delta$ between vertices
+\item $w$ is the weight given
+\item $k$ is the natural spring size (constant)
+\item $C$ reduces enormous changes (constant)
+\end{itemize}
+}
+\only<4>{
+Outline of the attractive force:\\
+\begin{center}
+\begin{minipage}{.55\linewidth}
+\begin{algorithm}[H]
+\Fn{Attractive(x, d, w)} {
+    \Return $\frac{x-k}{d} - Repulsive(x, w) $\;
+}
+\end{algorithm}
+\end{minipage}
+\end{center}
+\begin{itemize}
+\item $x$ is the size of the $\Delta$ between vertices
+\item $w$ is the weight given
+\item $k$ is the natural spring size (constant)
+\item $d$ is the number of neighbours
+\end{itemize}
+}
+
 \end{frame}
 
 \begin{frame}{Implementation details}
@@ -198,17 +264,17 @@ Online repository at \url{github.com/edroque93/GraphCat}
 \end{center}
 \end{frame}
 
-\begin{frame}{Experiment: force functions}
-Foo bar
-\end{frame}
-
-\begin{frame}{Experiment: scaling}
-Foo bar
-\end{frame}
-
-\begin{frame}{Experiment: convergence}
-Foo bar
-\end{frame}
+%\begin{frame}{Experiment: force functions}
+%Foo bar
+%\end{frame}
+%
+%\begin{frame}{Experiment: scaling}
+%Foo bar
+%\end{frame}
+%
+%\begin{frame}{Experiment: convergence}
+%Foo bar
+%\end{frame}
 
 
 \begin{frame}{Extensions/Optimizations}
@@ -274,7 +340,7 @@ $\Rightarrow$ Split work between multiple cores (shared memory)
 \begin{frame}{Conclusions}
 \begin{itemize}
 \item A good initial positioning is essential
-\item Forces take into consideration only connected nodes, some nodes may position in between unrelated nodes
+\item Requires fine tunning of constants according graph size and other factors % others? xd
 \end{itemize}
 \end{frame}
 
@@ -283,6 +349,12 @@ $\Rightarrow$ Split work between multiple cores (shared memory)
 \begin{frame}{References}
   \bibliographystyle{amsalpha}
   \bibliography{refs.bib}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Huge{Demo time!}
+\end{center}
 \end{frame}
 
 \end{document}
