@@ -1,9 +1,9 @@
 ~*
 graphcat
 obj/
-*.svg
-*.png
+output/
 refs.bib
+
 
 # Created by https://www.gitignore.io/api/latex,linux,vim
 
@@ -25,9 +25,9 @@ refs.bib
 *.dvi
 *-converted-to.*
 # these rules might exclude image files for figures etc.
-*.ps
-*.eps
-*.pdf
+pres/*.ps
+pres/*.eps
+pres/*.pdf
 
 ## Generated if empty string is given at "Please type another file name for output:"
 .pdf
