@@ -20,6 +20,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{wasysym}
+\usepackage[absolute,overlay]{textpos}
 
 \title{Graph Drawing}
 \date{\today}
@@ -43,6 +44,8 @@
 }
 
 \end{filecontents}
+
+\newcommand*{\describe}[1]{$\diamond$ \textbf{#1}\ }
 
 \begin{document}
 \maketitle
@@ -146,6 +149,63 @@ V=
 \includegraphics[width=0.8\textwidth]{images/rectangle.png}
 }
 
+\end{frame}
+
+\begin{frame}{Extensions/Optimizations}
+Embarassingly parallel algorithm:
+\begin{itemize}
+  \item Double buffering (no read/write conflicts)
+  \item Independent computation for each node
+\end{itemize}
+$\Rightarrow$ Split work between multiple cores (shared memory)
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={draw,circle,minimum width=7mm},
+  edge/.style={very thick}
+  ]
+
+  \begin{scope}
+    \node (a) at (0,0)      {1};
+    \node (b) at (0.5,1)    {2};
+    \node (c) at (1.2,-0.8) {3};
+    \node (d) at (1.5,0.2)  {4};
+    \node (e) at (2.3,1.1)  {5};
+    \node (f) at (2.6,-0.1) {6};
+
+    \draw[edge] (a) -- (b);
+    \draw[edge] (b) -- (d);
+    \draw[edge] (a) -- (c);
+    \draw[edge] (c) -- (d);
+    \draw[edge] (d) -- (e);
+    \draw[edge] (d) -- (f);
+
+    \node[draw=none] at (4,0) {\Huge$\Rightarrow$};
+  \end{scope}
+  \begin{scope}[xshift=5.2cm]
+    \node[fill=blue!10] (a) at (0,0)      {1};
+    \node[fill=blue!10] (b) at (0.5,1)    {2};
+    \node[fill=blue!10] (c) at (1.2,-0.8) {3};
+    \node[fill=red!10] (d) at (1.5,0.2)  {4};
+    \node[fill=red!10] (e) at (2.3,1.1)  {5};
+    \node[fill=red!10] (f) at (2.6,-0.1) {6};
+
+    \node[draw=none, below of=a] {core 0};
+    \node[draw=none, below of=f] {core 1};
+
+    \draw[edge] (a) -- (b);
+    \draw[edge] (b) -- (d);
+    \draw[edge] (a) -- (c);
+    \draw[edge] (c) -- (d);
+    \draw[edge] (d) -- (e);
+    \draw[edge] (d) -- (f);
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Extensions/Optimizations}
+  Clustering\dots
 \end{frame}
 
 \nocite{*}
