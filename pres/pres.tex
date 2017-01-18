@@ -23,31 +23,28 @@
 
 \title{Graph Drawing}
 \date{\today}
-\author{Calvin Bulla \\ Enrique Diaz Roque}
-\institute{Randomized Algorithms}
+\author{Calvin Bulla \\ Enrique Díaz Roque}
+\institute{Algorithms for VSLI}
 
-% \begin{filecontents}{refs.bib}{
-% }
-% \end{filecontents}
+\begin{filecontents}{refs.bib}
+@inproceedings{walshaw2000multilevel,
+  title={A multilevel algorithm for force-directed graph drawing},
+  author={Walshaw, Chris},
+  booktitle={International Symposium on Graph Drawing},
+  pages={171--182},
+  year={2000},
+  organization={Springer}
+}
+\end{filecontents}
 
 \begin{document}
-\begin{frame}{Hello world}
-  \begin{minipage}{0.45\textwidth}
-  \say{This is cool}
-  \begin{itemize}
-    \item foo
-    \item bar
-    \item baz
-  \end{itemize}
-  \end{minipage}
-  \begin{minipage}{0.45\textwidth}
-  \say{This is cool}
-  \begin{itemize}
-    \item foo
-    \item bar
-    \item baz
-  \end{itemize}
-  \end{minipage}
+\maketitle
+
+\nocite{*}
+
+\begin{frame}{References}
+  \bibliographystyle{amsalpha}
+  \bibliography{refs.bib}
 \end{frame}
 
 \end{document}
