@@ -1,8 +1,8 @@
 #include "topology.hpp"
 
 #include <fstream>
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
 
 #include <cassert>
 #include <cerrno>
@@ -155,6 +155,22 @@ void topology::save_csv(const string &filename, char delim) {
     }
 }
 
+topology topology::read_dat(const string &filename) {
+    assert(0 && "Not implemented");
+    return topology();
+    // FILE *fp = fopen(filename.c_str(), "rb");
+    // gsl_matrix *matrix;
+    // if (fp == NULL) {
+    //     throw std::runtime_error("unable to open file " + filename + ": " +
+    //                              strerror(errno));
+    // }
+    // if (gsl_matrix_fread(fp, matrix) != 0) {
+    //     fclose(fp)
+    //     throw std::runtime_error("unable to read matrix");
+    // }
+    // fclose(fp);
+}
+
 void topology::save_dat(const string &filename) {
     FILE *fp = fopen(filename.c_str(), "wb");
     if (fp == NULL) {
@@ -178,8 +194,3 @@ std::ostream &operator<<(ostream &os, const topology &top) {
     return os;
 }
 
-string topology::debug() const {
-    stringstream ss;
-    ss << *this;
-    return ss.str();
-}

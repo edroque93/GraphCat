@@ -13,7 +13,7 @@
 
 class topology {
     gsl_matrix *matrix = nullptr;
-    topology(){};
+    topology(gsl_matrix *mat = nullptr) : matrix(mat) {}
 
    public:
     ~topology();
@@ -31,19 +31,24 @@ class topology {
     bool is_neighbour(size_t i, size_t j) const { return get(i, j) > 0; }
     std::vector<size_t> get_neighbours(size_t i) const;
 
+    bool points_to(size_t i, size_t j) const {
+        return is_neighbour(i, j) && !is_neighbour(j, i);
+    }
+    bool connected(size_t i, size_t j) const {
+        return is_neighbour(i, j) && is_neighbour(j, i);
+    }
+
     void fix_identity();
     gsl_matrix *copy_matrix() const;
 
     static topology generate_topology(const std::vector<node *> &graph);
+
     static topology read_csv(const std::string &filename);
     static topology read_dat(const std::string &filename);
-
     void save_csv(const std::string &filename, char delim = ' ');
     void save_dat(const std::string &filename);
 
     friend std::ostream &operator<<(std::ostream &os, const topology &top);
-
-    std::string debug() const;
 };
 
-#endif // TOPOLOGY_HPP
+#endif  // TOPOLOGY_HPP

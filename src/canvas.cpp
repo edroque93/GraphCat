@@ -65,25 +65,24 @@ void canvas::draw_arrow(double x1, double y1, double x2, double y2,
     draw_arrow_head(x1, y1, x2, y2, offset);
 }
 
-void canvas::draw_point(double x, double y, double r, size_t i) {
+void canvas::draw_node(double x, double y, double r, const string &txt) {
     cairo_arc(cr, x, y, r, 0.0, M_PI * 2.0);
     cairo_fill(cr);
     cairo_stroke(cr);
 
-    char buffer[100];
-    snprintf(buffer, 100, "%zu", i);
+    if (txt.empty()) return;
 
     cairo_text_extents_t extents;
     cairo_save(cr);
     cairo_set_source_rgba(cr, 1, 1, 1, 1);
     cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
                            CAIRO_FONT_WEIGHT_NORMAL);
-    cairo_set_font_size(cr, height * 10.0 / 512);
-    cairo_text_extents(cr, buffer, &extents);
+    cairo_set_font_size(cr, r * 1.6);
+    cairo_text_extents(cr, txt.c_str(), &extents);
     x -= (extents.width / 2 + extents.x_bearing);
     y -= (extents.height / 2 + extents.y_bearing);
     cairo_move_to(cr, x, y);
-    cairo_show_text(cr, buffer);
+    cairo_show_text(cr, txt.c_str());
     cairo_restore(cr);
 }
 

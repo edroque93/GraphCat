@@ -5,6 +5,13 @@
 
 using namespace std;
 
+compute::compute(topology topo) : oldpos(points1), newpos(points2), topo(topo) {
+    topo.fix_identity();
+    estimate_params();
+}
+
+void compute::estimate_params() {}
+
 void compute::generate_eigenvectors() {
     gsl_matrix *conmat = topo.copy_matrix();
     size_t dimension = conmat->size1;
@@ -44,14 +51,12 @@ void compute::generate_eigenvectors() {
     // Normalize to 0..1 and add to vectors
 
     for (size_t i = 0; i < dimension; ++i) {
-        vec2 point = {max(0.0,((1 + gsl_vector_get(&vx_vv.vector, i)) / 2)),
-                      max(0.0,((1 + gsl_vector_get(&vy_vv.vector, i)) / 2))};
+        vec2 point = {max(0.0, ((1 + gsl_vector_get(&vx_vv.vector, i)) / 2)),
+                      max(0.0, ((1 + gsl_vector_get(&vy_vv.vector, i)) / 2))};
 
         points1.push_back(point);
         points2.push_back(point);
     }
-
-    printf("=======\n");
 
     // Free structures
 
@@ -62,7 +67,8 @@ void compute::generate_eigenvectors() {
     gsl_eigen_symmv_free(workspace);
 }
 
-void compute::update() {
+bool compute::update() {
+    bool converged = true;
     auto size = oldpos.size();
     for (size_t i = 0; i < size; ++i) {
         vec2 disp = {0, 0};
@@ -71,7 +77,8 @@ void compute::update() {
         for (size_t j = 0; j < size; ++j) {
             if (i != j) {
                 vec2 delta = oldpos[j] - oldpos[i];
-                disp += delta / nonzero(delta.size()) * repulsive(delta.size(), 1);
+                disp +=
+                    delta / nonzero(delta.size()) * repulsive(delta.size(), 1);
             }
         }
 
@@ -83,37 +90,38 @@ void compute::update() {
                     spring(delta.size(), neighbours.size(), 1);
         }
 
-        std::cout << i << ": Pos " << oldpos[i] << ", Disp" << disp << '\n';
-
         newpos[i] = oldpos[i] + disp;
+        if (disp.size() > spring_factor * tolerance) converged = false;
     }
 
     std::swap(oldpos, newpos);
+
+    return converged;
 }
 
-void compute::normalize() {
-    vec2 max = {std::numeric_limits<double>::min(),
-                std::numeric_limits<double>::min()};
-    vec2 min = {std::numeric_limits<double>::max(),
-                std::numeric_limits<double>::max()};
-    for (auto &pt : oldpos) {
-        min.x = std::min(pt.x, min.x);
-        max.x = std::max(pt.x, max.x);
-        min.y = std::min(pt.y, min.y);
-        max.y = std::max(pt.y, max.y);
-    }
-
-    vec2 dv = max - min;
-    double delta = std::max(dv.x, dv.y);
-    for (auto &pt : oldpos) {
-        pt = (pt - min) / delta;
-    }
-}
+// void compute::normalize() {
+//     vec2 max = {std::numeric_limits<double>::min(),
+//                 std::numeric_limits<double>::min()};
+//     vec2 min = {std::numeric_limits<double>::max(),
+//                 std::numeric_limits<double>::max()};
+//     for (auto &pt : oldpos) {
+//         min.x = std::min(pt.x, min.x);
+//         max.x = std::max(pt.x, max.x);
+//         min.y = std::min(pt.y, min.y);
+//         max.y = std::max(pt.y, max.y);
+//     }
+//
+//     vec2 dv = max - min;
+//     double delta = std::max(dv.x, dv.y);
+//     for (auto &pt : oldpos) {
+//         pt = (pt - min) / delta;
+//     }
+// }
 
 double compute::repulsive(double x, double w) {
     return -big_c * w * spring_factor * spring_factor / nonzero(x);
 }
+
 double compute::spring(double x, double d, double w) {
     return (x - spring_factor) / nonzero(d) - repulsive(x, w);
 }
-
