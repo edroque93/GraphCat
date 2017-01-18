@@ -36,6 +36,13 @@
   year={2000},
   organization={Springer}
 }
+@article{gallier2014elementary,
+  title={Elementary Spectral Graph Theory Applications to Graph Clustering Using Normalized Cuts: a Survey},
+  author={Gallier, Jean and Gallier, C Jean},
+  year={2014},
+  publisher={Citeseer}
+}
+
 \end{filecontents}
 
 \newcommand*{\describe}[1]{$\diamond$ \textbf{#1}\ }
@@ -65,6 +72,7 @@
 \begin{frame}{Initial positioning}
 \centering
 \only<1>{
+Start with a symmetric topology matrix\\\vspace{2em}
 $
 A=
  \begin{pmatrix}
@@ -76,6 +84,7 @@ A=
 $
 }
 \only<2>{
+Weight of A in diagonal\\\vspace{2em}
 $
 D=
  \begin{pmatrix}
@@ -87,7 +96,7 @@ D=
 $
 }
 \only<3>{
-Unnormalized Laplacian matrix associated with A\vspace{2em}
+Unnormalized Laplacian matrix associated with A\\\vspace{2em}
 $
 L=D-A=
  \begin{pmatrix}
@@ -98,6 +107,43 @@ L=D-A=
  \end{pmatrix}
 $
 }
+\only<4>{
+We obtain eigenvalues of L such that\\\vspace{2em}
+$
+0=\lambda_1 \leq \lambda_2 \leq \lambda_3 \leq ... \leq \lambda_m
+$
+}
+\only<5>{
+It is known that the minimal energy of any blanced orthogonal graph in ${\rm I\!R}^n$ is\\\vspace{2em}
+$
+0= \lambda_2 + ... + \lambda_{n+1}
+$\\\vspace{2em}
+hence, the eigenvectors associated yields a blanced orthogonal graph drawing of minimal energy
+}
+
+\only<6>{
+Eigenvalues and eigenvectors of L\\\vspace{2em}
+$
+E=
+ \begin{pmatrix}
+  4 & 0 & 0 & 0 \\
+  0 & 2 & 0 & 0 \\
+  0 & 0 & 2 & 0 \\
+  0 & 0 & 0 & 0 \\
+ \end{pmatrix}
+$
+\\\vspace{1em}
+$
+V=
+ \begin{pmatrix}
+   0.50000 &  0.67458 & -0.21200 & 0.50000 \\
+  -0.50000 &  0.21200 &  0.67458 & 0.50000 \\
+  -0.50000 & -0.21200 & -0.67458 & 0.50000 \\
+   0.50000 & -0.67458 &  0.21200 & 0.50000 \\
+ \end{pmatrix}
+ $
+}
+
 
 \end{frame}
 
