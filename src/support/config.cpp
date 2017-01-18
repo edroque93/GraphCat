@@ -5,11 +5,11 @@
 #include <fstream>
 #include <iostream>
 
-#include "../utils/stringops.hpp"
+#include "stringops.hpp"
 
 using namespace std;
 
-const string &config::section::operator[](const string &key) const {
+const string &config::section::retrieve(const string &key) const {
     auto it = values.find(key);
     if (it == values.end()) throw runtime_error("value " + key + " not found");
     return it->second;
@@ -25,7 +25,6 @@ config config::read_ini(const string &filename) {
     ifstream ifs(filename);
     string line;
 
-    std::map<std::string, std::string> *section = nullptr;
     size_t lineno = 0;
 
     while (getline(ifs, line)) {
@@ -49,15 +48,13 @@ config config::read_ini(const string &filename) {
                 throw runtime_error("line " + to_string(lineno) +
                                     ": expected identifier");
             }
-            map<string, string> values;
-            auto ret = cfg.values.insert(make_pair(name, values));
-            if (ret.second == false) {
+            if (cfg.has_section(name)) {
                 throw runtime_error("line " + to_string(lineno) +
                                     ": duplicate section");
             }
-            section = &(ret.first->second);
+            cfg.sections.push_back(section(name));
         } else {  // key = value
-            if (section == nullptr) {
+            if (cfg.sections.empty()) {
                 throw runtime_error("line " + to_string(lineno) +
                                     ": no current section");
             }
@@ -79,43 +76,44 @@ config config::read_ini(const string &filename) {
                 throw runtime_error("line " + to_string(lineno) +
                                     ": missing value");
             }
-            auto ret = section->insert(make_pair(key, value));
+            auto ret = cfg.sections.back().values.insert(make_pair(key, value));
             if (ret.second == false) {
                 throw runtime_error("line " + to_string(lineno) +
                                     ": duplicate section");
             }
         }
     }
-    return move(cfg);
+    return cfg;
 }
 
 void config::save_ini(const string &filename) {
     ofstream ofs(filename);
-    for (const auto &sec : values) {
-        ofs << '[' << sec.first << "]\n";
-        for (const auto &p : sec.second) {
+    for (const auto &sec : sections) {
+        ofs << '[' << sec.name << "]\n";
+        for (const auto &p : sec.values) {
             ofs << p.first << " = " << p.second << '\n';
         }
     }
 }
 
 bool config::has_section(const string &name) const {
-    auto it = values.find(name);
-    return it != values.end();
+    auto it = find_if(sections.begin(), sections.end(),
+                      [&](const section &s) { return s.name == name; });
+    return it != sections.end();
 }
 
-config::section config::operator[](const string &name) const {
-    auto it = values.find(name);
-    if (it == values.end())
+const config::section &config::retrieve(const string &name) const {
+    auto it = find_if(sections.begin(), sections.end(),
+                      [&](const section &s) { return s.name == name; });
+    if (it == sections.end())
         throw runtime_error("section " + name + " not found");
-    config::section sec(name, it->second);
-    return move(sec);
+    return *it;
 }
 
 ostream &operator<<(ostream &os, const config &cfg) {
-    for (const auto &sec : cfg.values) {
-        os << " [" << sec.first << "]\n";
-        for (const auto &p : sec.second) {
+    for (const auto &sec : cfg.sections) {
+        os << " [" << sec.name << "]\n";
+        for (const auto &p : sec.values) {
             os << ' ' << p.first << " = " << p.second << '\n';
         }
     }

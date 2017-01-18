@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TOPOLOGY_HPP
+#define TOPOLOGY_HPP
 
 #include <algorithm>
 #include <array>
@@ -8,7 +9,7 @@
 
 #include <gsl/gsl_matrix.h>
 
-#include "../builder/node.hpp"
+#include "generator/node.hpp"
 
 class topology {
     gsl_matrix *matrix = nullptr;
@@ -41,4 +42,8 @@ class topology {
     void save_dat(const std::string &filename);
 
     friend std::ostream &operator<<(std::ostream &os, const topology &top);
+
+    std::string debug() const;
 };
+
+#endif // TOPOLOGY_HPP

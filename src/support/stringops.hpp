@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STRINGOPS_HPP
+#define STRINGOPS_HPP
 
 #include <string>
 #include <vector>
@@ -30,3 +31,5 @@ std::vector<T> str_split(const std::string &str,
 
     return std::move(vec);
 }
+
+#endif // STRINGOPS_HPP
