@@ -23,9 +23,9 @@
 \usepackage[absolute,overlay]{textpos}
 
 \title{Graph Drawing}
-\date{\today}
+\date{January 19, 2017}
 \author{Calvin Bulla \\ Enrique Díaz Roque}
-\institute{Algorithms for VSLI}
+\institute{Algorithms for VLSI}
 
 \begin{filecontents}{refs.bib}
 @inproceedings{walshaw2000multilevel,
@@ -42,7 +42,12 @@
   year={2014},
   publisher={Citeseer}
 }
-
+@book{kahng2011vlsi,
+  title={VLSI physical design: from graph partitioning to timing closure},
+  author={Kahng, Andrew B and Lienig, Jens and Markov, Igor L and Hu, Jin},
+  year={2011},
+  publisher={Springer Science \& Business Media}
+}
 \end{filecontents}
 
 \newcommand*{\describe}[1]{$\diamond$ \textbf{#1}\ }
@@ -50,23 +55,50 @@
 \begin{document}
 \maketitle
 
-\begin{frame}
-\begin {enumerate}
-\item Where (class topic) ~ Global and detailed placement ~ Force directed placement (class theory)
-\item Our setup
-\item Graph drawing
-\item Initial position
-\item Iterative process
-\item Forces
-\item Repulsive
-\item Spring
-\item Parallelism
-\item Experiments modifying functions (forces)
-\item Experiments scaling topology
-\item Experiments convergence
-\item Extensions (clustering, optimizations, details that we didn’t have time to implement (but we liked), …)
-\item Conclusion
+%\begin{frame}
+%\begin {enumerate}
+%\item Where (class topic) ~ Global and detailed placement ~ Force directed placement (class theory)
+%\item Our setup
+%\item Graph drawing
+%\item Initial position
+%\item Iterative process
+%\item Forces
+%\item Repulsive
+%\item Spring
+%\item Parallelism
+%\item Experiments modifying functions (forces)
+%\item Experiments scaling topology
+%\item Experiments convergence
+%\item Extensions (clustering, optimizations, details that we didn’t have time to implement (but we liked), …)
+%\item Conclusion
+%\end{enumerate}
+%\end{frame}
+
+\begin{frame}{Index}
+\begin{enumerate}
+\item Introduction
+\item Initial positioning
+\item Repulsive and attractive forces
+\item Implementation details
+\item Extensions/Optimizations
+\item Experiments
+\item Conclusions
 \end{enumerate}
+\end{frame}
+
+\begin{frame}{Introduction}
+\begin{itemize}
+\item Global and detailed placement
+\item Analytic tecnique
+\begin{itemize}
+\item Quadratic placement
+\item Force-directed placement
+\end{itemize}
+\end{itemize}
+
+\centering
+\includegraphics[width=0.6\textwidth]{images/placement.png}
+
 \end{frame}
 
 \begin{frame}{Initial positioning}
@@ -151,6 +183,34 @@ V=
 
 \end{frame}
 
+\begin{frame}{Repulsive and attractive forces}
+Foo bar
+\end{frame}
+
+\begin{frame}{Implementation details}
+\begin{enumerate}
+\item C++
+\item GSL - GNU Scientific Library
+\item Cairo (2D Grahpics)
+\end{enumerate}
+\begin{center}
+Online repository at \url{github.com/edroque93/GraphCat}
+\end{center}
+\end{frame}
+
+\begin{frame}{Experiment: force functions}
+Foo bar
+\end{frame}
+
+\begin{frame}{Experiment: scaling}
+Foo bar
+\end{frame}
+
+\begin{frame}{Experiment: convergence}
+Foo bar
+\end{frame}
+
+
 \begin{frame}{Extensions/Optimizations}
 Embarassingly parallel algorithm:
 \begin{itemize}
@@ -205,7 +265,17 @@ $\Rightarrow$ Split work between multiple cores (shared memory)
 \end{frame}
 
 \begin{frame}{Extensions/Optimizations}
-  Clustering\dots
+  Clustering:
+  \begin{center}
+  \includegraphics[width=0.6\textwidth]{images/clustering.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Conclusions}
+\begin{itemize}
+\item A good initial positioning is essential
+\item Forces take into consideration only connected nodes, some nodes may position in between unrelated nodes
+\end{itemize}
 \end{frame}
 
 \nocite{*}
