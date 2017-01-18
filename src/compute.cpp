@@ -10,7 +10,9 @@ compute::compute(topology topo) : oldpos(points1), newpos(points2), topo(topo) {
     estimate_params();
 }
 
-void compute::estimate_params() {}
+void compute::estimate_params() {
+    spring_factor = 2.0 / topo.size();
+}
 
 void compute::generate_eigenvectors() {
     gsl_matrix *conmat = topo.copy_matrix();
