@@ -8,8 +8,8 @@
 #include <gsl/gsl_eigen.h>
 #include <gsl/gsl_vector.h>
 
-#include "../common/topology.hpp"
-#include "vector.hpp"
+#include "topology.hpp"
+#include "support/vector.hpp"
 
 class compute {
    private:
@@ -49,4 +49,4 @@ class compute {
     const std::vector<vec2> &get_points() { return oldpos; }
 };
 
-#endif
+#endif // COMPUTE_HPP

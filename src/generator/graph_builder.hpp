@@ -7,7 +7,7 @@
 
 #include <gsl/gsl_matrix.h>
 
-#include "../common/topology.hpp"
+#include "../topology.hpp"
 #include "node.hpp"
 
 namespace graph_builder {

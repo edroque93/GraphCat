@@ -1,4 +1,5 @@
-#pragma once
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
 
 #include <cassert>
 #include <cmath>
@@ -49,3 +50,5 @@ struct vec2 {
         return os << '(' << vector.x << ',' << vector.y << ')';
     }
 };
+
+#endif // VECTOR_HPP

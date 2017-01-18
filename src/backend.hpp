@@ -8,17 +8,16 @@
 
 #include <cairo/cairo-svg.h>
 
-#include "../common/config.hpp"
-#include "../common/database.hpp"
-#include "../common/topology.hpp"
-#include "../compute/vector.hpp"
-#include "../utils/stringops.hpp"
+#include "support/config.hpp"
+#include "support/stringops.hpp"
+#include "support/vector.hpp"
+
 #include "canvas.hpp"
+#include "topology.hpp"
 
 namespace backend {
 void plot(const config &cfg, const topology &topo,
-          const std::vector<vec2> &points, const database &attrib,
-          std::string suffix = "");
+          const std::vector<vec2> &points, std::string suffix = "");
 
 const int default_margin = 32;
 const int default_width = 512;
@@ -26,4 +25,4 @@ const int default_height = 512;
 const canvas::img_format default_format = canvas::img_format::SVG;
 };
 
-#endif
+#endif // BACKEND_HPP

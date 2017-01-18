@@ -1,4 +1,5 @@
-#pragma once
+#ifndef OPTION_HPP
+#define OPTION_HPP
 
 #include <iostream>
 #include <stdexcept>
@@ -44,3 +45,5 @@ class option_list {
     void show_help(std::ostream &os = std::cout) const;
     int parse(int argc, char **argv);
 };
+
+#endif // OPTION_HPP

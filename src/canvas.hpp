@@ -1,12 +1,12 @@
-#ifndef DRAW_HPP
-#define DRAW_HPP
+#ifndef CANVAS_HPP
+#define CANVAS_HPP
 
 #include <stdexcept>
 
 #include <cairo/cairo-svg.h>
 #include <math.h>
 
-#include "../utils/stringops.hpp"
+#include "support/stringops.hpp"
 
 class canvas {
    public:
@@ -38,4 +38,4 @@ class canvas {
     int width, height;
 };
 
-#endif
+#endif // CANVAS_HPP

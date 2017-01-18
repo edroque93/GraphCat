@@ -3,8 +3,7 @@
 using namespace std;
 
 void backend::plot(const config &cfg, const topology &topo,
-                   const std::vector<vec2> &points, const database &attrib,
-                   std::string suffix) {
+                   const std::vector<vec2> &points, std::string suffix) {
     auto out = cfg["output"];
     int width = out.get<int>("width", backend::default_width);
     int height = out.get<int>("height", backend::default_height);
