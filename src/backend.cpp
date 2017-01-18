@@ -2,52 +2,42 @@
 
 using namespace std;
 
-void backend::plot(const config &cfg, const topology &topo,
-                   const std::vector<vec2> &points, std::string suffix) {
-    auto out = cfg["output"];
-    int width = out.get<int>("width", backend::default_width);
-    int height = out.get<int>("height", backend::default_height);
-    int margin = out.get<int>("margin", backend::default_margin);
-    canvas cairo(out.get<string>("filename", "plot") + suffix,
-                 out.get<canvas::img_format>("type", backend::default_format),
-                 width, height);
-    // cairo.rgba(0.86, 0.77, 0.87, 1.0);
+vec2 backend::translate(vec2 pos) {
+    return {margin + (width - 2.0 * margin) * pos.x,
+            margin + (height - 2.0 * margin) * pos.y};
+}
+
+void backend::plot(const std::vector<vec2> &points,
+                   const std::string &filename) {
+    canvas cairo(filename, fmt, width, height);
     cairo.rgba(1, 1, 1, 1);
     cairo.draw_rectangle(0, 0, width, height);
-    // cairo.watermark();
-    const double node_radius = 7.0;
     for (size_t i = 0; i < topo.size(); ++i) {
         cairo.rgba(0, 0, 0, 1);
-        int nodex = margin + (width - margin * 2) * points[i].x;
-        int nodey = margin + (height - margin * 2) * points[i].y;
-        cairo.draw_point(nodex, nodey, node_radius, i);
+        vec2 pos = translate(points[i]);
         for (size_t j = i; j < topo.size(); ++j) {
-            if (topo.get(i, j) && topo.get(j, i)) {
-                int nodex_end = margin + (width - margin * 2) * points[j].x;
-                int nodey_end = margin + (height - margin * 2) * points[j].y;
-                cairo.draw_line(nodex, nodey, nodex_end, nodey_end);
+            if (topo.connected(i, j)) {
+                vec2 pos2 = translate(points[j]);
+                cairo.draw_line(round(pos.x), round(pos.y), round(pos2.x),
+                                round(pos2.y));
                 continue;
             }
-            if (topo.get(i, j) && !topo.get(j, i)) {
-                int nodex_end = margin + (width - margin * 2) * points[j].x;
-                int nodey_end = margin + (height - margin * 2) * points[j].y;
-                cairo.draw_arrow(nodex, nodey, nodex_end, nodey_end,
-                                 node_radius);
+            if (topo.points_to(i, j)) {
+                vec2 pos2 = translate(points[j]);
+                cairo.draw_arrow(round(pos.x), round(pos.y), round(pos2.x),
+                                 round(pos2.y), radius);
                 continue;
             }
-            if (!topo.get(i, j) && topo.get(j, i)) {
-                int nodex_end = margin + (width - margin * 2) * points[j].x;
-                int nodey_end = margin + (height - margin * 2) * points[j].y;
-                cairo.draw_arrow(nodex_end, nodey_end, nodex, nodey,
-                                 node_radius);
+            if (topo.points_to(j, i)) {
+                vec2 pos2 = translate(points[j]);
+                cairo.draw_arrow(round(pos2.x), round(pos2.y), round(pos.x),
+                                 round(pos.y), radius);
                 continue;
             }
         }
     }
     for (size_t i = 0; i < topo.size(); ++i) {
-        cairo.rgba(0, 0, 0, 1);
-        int nodex = margin + (width - margin * 2) * points[i].x;
-        int nodey = margin + (height - margin * 2) * points[i].y;
-        cairo.draw_point(nodex, nodey, node_radius, i);
+        vec2 pos = translate(points[i]);
+        cairo.draw_node(round(pos.x), round(pos.y), radius, to_string(i));
     }
 }

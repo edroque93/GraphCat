@@ -8,8 +8,8 @@
 #include <gsl/gsl_eigen.h>
 #include <gsl/gsl_vector.h>
 
-#include "topology.hpp"
 #include "support/vector.hpp"
+#include "topology.hpp"
 
 class compute {
    private:
@@ -20,33 +20,28 @@ class compute {
     std::vector<vec2> &oldpos;
     std::vector<vec2> &newpos;
 
-    const topology &topo;
-
-    vec2 repulsive(size_t i, size_t j);
-    vec2 spring(size_t i, size_t j);
+    const topology topo;
 
     double repulsive(double x, double w);
     double spring(double x, double d, double w);
 
     double spring_factor = 0.1;
     double big_c = 0.05;
+    double tolerance = 0.001;
 
     double nonzero(double d) {
-        if (d < 0) {
-            return std::min(-1e-10, d);
-        } else {
-            return std::max(1e-10, d);
-        }
+        return (d < 0) ? std::min(-1e-10, d) : std::max(1e-10, d);
     }
 
+    void estimate_params();
+
    public:
-    compute(topology &topo)
-        : oldpos(points1), newpos(points2), topo(topo) {}
+    compute(topology topo);
+
     void generate_eigenvectors();
-    void update();
-    void normalize();
+    bool update(); // returns true if converged
 
     const std::vector<vec2> &get_points() { return oldpos; }
 };
 
-#endif // COMPUTE_HPP
+#endif  // COMPUTE_HPP
