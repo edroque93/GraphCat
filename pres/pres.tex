@@ -12,6 +12,7 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{pgfplots}
 % Utility
 \usepackage{dirtytalk}
 \usepackage{xcolor}
@@ -82,8 +83,8 @@
 \item Initial positioning
 \item Repulsive and attractive forces
 \item Implementation details
+\item Experiment
 \item Extensions/Optimizations
-%\item Experiments
 \item Conclusions
 \end{enumerate}
 \end{frame}
@@ -276,6 +277,27 @@ Online repository at \url{github.com/edroque93/GraphCat}
 %Foo bar
 %\end{frame}
 
+\begin{frame}{Experiment: empirical execution time}
+\vspace{2em}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[ grid=major,xlabel=Nodes, ylabel=Time (s)] 
+\addplot[color=green!30!black,mark=x] coordinates { 
+(4,.00001    )
+(8,.00010    )
+(16,.00035   )
+(32,.00133   )
+(64,.00491   )
+(128,.01875  )
+(256,.07558  )
+(512,.31044  )
+(1024,1.17818)
+(2048,4.73820)
+}; 
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\end{frame}
 
 \begin{frame}{Extensions/Optimizations}
 Embarassingly parallel algorithm:
@@ -351,7 +373,7 @@ $\Rightarrow$ Split work between multiple cores (shared memory)
   \bibliography{refs.bib}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[plain,noframenumbering]
 \begin{center}
 \Huge{Demo time!}
 \end{center}
