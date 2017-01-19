@@ -277,6 +277,16 @@ Online repository at \url{github.com/edroque93/GraphCat}
 %Foo bar
 %\end{frame}
 
+\pgfplotstableread{
+X Y
+1 1
+2 4
+3 9
+4 16
+5 25
+6 36
+}\datatable
+
 \begin{frame}{Experiment: empirical execution time}
 \vspace{2em}
 \begin{center}
@@ -294,6 +304,7 @@ Online repository at \url{github.com/edroque93/GraphCat}
 (1024,1.17818)
 (2048,4.73820)
 }; 
+\addplot[color=red,domain=0:2048,samples=400] {1/900000*x^2}; % A ojo :D
 \end{axis}
 \end{tikzpicture}
 \end{center}
