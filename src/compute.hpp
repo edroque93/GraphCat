@@ -27,7 +27,7 @@ class compute {
 
     double spring_factor = 0.1;
     double big_c = 0.05;
-    double tolerance = 0.01;
+    double tolerance = 0.005;
 
     double nonzero(double d) {
         return (d < 0) ? std::min(-1e-10, d) : std::max(1e-10, d);

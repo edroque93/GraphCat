@@ -38,6 +38,6 @@ void backend::plot(const std::vector<vec2> &points,
     }
     for (size_t i = 0; i < topo.size(); ++i) {
         vec2 pos = translate(points[i]);
-        cairo.draw_node(round(pos.x), round(pos.y), radius, to_string(i));
+        cairo.draw_node(round(pos.x), round(pos.y), radius, to_string(i+1));
     }
 }

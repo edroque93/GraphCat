@@ -53,6 +53,7 @@ int main(int argc, char **argv) try {
     be.set_margin(output.get<int>("margin", 16));
     be.set_margin(
         output.get<canvas::img_format>("type", canvas::img_format::PNG));
+    be.set_radius(output.get<double>("nodesize",7));
 
     string outfile =
         opts.get<string>("output", output.get<string>("filename", "out"));
